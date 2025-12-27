@@ -1,3 +1,4 @@
+#This is Database_Manipulation.py
 import sqlite3
 
 con= sqlite3.connect("GrabNGo_Database.db")
@@ -31,9 +32,10 @@ class Create_Database:
 			Password TEXT,
 			Location TEXT,
 			Opening_time TIME,
-			Rating INTEGER,
+			Rating REAL,
 			Number_of_sales INTEGER,
 			Created_at DATETIME,
+			Profile_pic TEXT,
 			Status TEXT)
 
 		""")
@@ -59,8 +61,8 @@ class Create_Database:
 			Quantity INTEGER,
 			Product_Image_path TEXT,
 
-			FOREIGN KEY (Product_ID) REFERENCES PRODUCT(Product_ID),
-			FOREIGN KEY (Seller_ID) REFERENCES SELLER_ACCOUNTS(Seller_ID))
+			FOREIGN KEY (Product_ID) REFERENCES PRODUCT(Product_ID) ON DELETE CASCADE,
+			FOREIGN KEY (Seller_ID) REFERENCES SELLER_ACCOUNTS(Seller_ID) ON DELETE CASCADE)
 		""")
 
 
@@ -111,9 +113,9 @@ class ADD_INTO_TABLES:
 			VALUES(?,?,?,?,?,?,?)""",(name,e_mail,location,phone,password,date_of_creation,"Active"))
 		self.connection.commit()
 
-	def add_into_seller_account(self,name,buisness_name,buisness_type,phone,e_mail,password,location,open_time,rating,number_of_sales,date_of_creation):
-		self.cus.execute("""INSERT INTO SELLER_ACCOUNTS (Full_name,Buisness_name,Buisness_type,Phone,Email,Password,Location,Opening_time,Rating,Number_of_sales,Created_at,Status)
-			VALUES(?,?,?,?,?,?,?,?,?,?,?,?)""",(name,buisness_name,buisness_type,phone,e_mail,password,location,open_time,rating,number_of_sales,date_of_creation,"Active"))
+	def add_into_seller_account(self,name,buisness_name,buisness_type,phone,e_mail,password,location,open_time,rating,number_of_sales,date_of_creation,img):
+		self.cus.execute("""INSERT INTO SELLER_ACCOUNTS (Full_name,Buisness_name,Buisness_type,Phone,Email,Password,Location,Opening_time,Rating,Number_of_sales,Created_at,Profile_pic,Status)
+			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)""",(name,buisness_name,buisness_type,phone,e_mail,password,location,open_time,rating,number_of_sales,date_of_creation,img,"Active"))
 		self.connection.commit()
 
 
@@ -125,14 +127,14 @@ class ADD_INTO_TABLES:
 
 	def add_into_Orders(self,ID1,ID2,ID3,price,qty,total):
 		self.cus.execute("""INSERT INTO ORDERS (Product_ID,Seller_ID,Buyer_ID,Price,Quantity,Total,Status)
-			VALUES(?,?,?,?,?,?,?)""",(ID1,ID2,ID3,price,qty,total,"Active"))
+			VALUES(?,?,?,?,?,?,?)""",(ID1,ID2,ID3,price,qty,total,"Pending"))
 		self.connection.commit()
 
 
 
-	def add_into_History(self,id1,id2,qty,price,date):
-		self.cus.execute("""INSERT INTO HISTORY (Buyer_ID,Product_ID,Product_qty,Price,Transaction_Date)
-			VALUES(?,?,?,?,?)""",(id1,id2,qty,price,date))
+	def add_into_History(self,id1,id2,id3,qty,price,date):
+		self.cus.execute("""INSERT INTO HISTORY (Buyer_ID,Seller_ID,Product_ID,Product_qty,Price,Transaction_Date)
+			 VALUES(?,?,?,?,?,?)""",(id1,id2,id3,qty,price,date))
 		self.connection.commit()
 
 
@@ -157,10 +159,11 @@ class Update_Table():
 		self.connection.commit()
 
 
-	def update_seller_product_price(self,id1,price):
+	def update_seller_product_price(self,id1,id2,price):
 		self.cus.execute("""UPDATE SELLER_PRODUCT SET
 			Price=?
-			WHERE Product_ID=?""",(price,id1))
+			WHERE Product_ID=? AND
+			Seller_ID=?""",(price,id2,id1))
 
 		self.connection.commit()
 
@@ -182,11 +185,83 @@ class Update_Table():
 
 		self.connection.commit()
 
+	def update_seller_rating(self,id1,rating):
+		self.cus.execute("""UPDATE SELLER_ACCOUNTS SET
+			Rating=?
+			WHERE Seller_ID=?""",(rating,id1))
 
-	def update_seller_qty(self,qty,id2):
+		self.connection.commit()
+
+	def update_seller_number_of_sales(self,id1,number_of_sales):
+		self.cus.execute("""UPDATE SELLER_ACCOUNTS SET
+			Number_of_sales=?
+			WHERE Seller_ID=?""",(number_of_sales,id1))
+
+		self.connection.commit()
+
+
+	def update_seller_qty(self,qty,id1,id2):
 		self.cus.execute("""UPDATE SELLER_PRODUCT SET
 			Quantity=?
-			WHERE Product_ID=?""",(qty,id2))
+			WHERE Product_ID=? AND
+			Seller_ID=?""",(qty,id1,id2))
+
+		self.connection.commit()
+
+
+	def update_order_qty(self,ID,qty):
+		self.cus.execute("""UPDATE ORDERS SET
+			Quantity=?
+			WHERE Order_ID=?""",(qty,ID))
+
+		self.connection.commit()
+
+
+	def update_seller_status(self,seller_id,status):
+		self.cus.execute("""UPDATE SELLER_ACCOUNTS SET
+			Status=?
+			WHERE Seller_ID=?""",(status,id1))
+
+		self.connection.commit()
+
+
+	def update_product_description(self,seller_id,description,product_id):
+		self.cus.execute("""UPDATE SELLER_PRODUCT SET
+			Description=?
+			WHERE Seller_ID=? AND
+			Product_ID=?""",(description,seller_id,product_id))
+
+		self.connection.commit()
+
+	def update_product_img(self,seller_id,img,product_id):
+		self.cus.execute("""UPDATE SELLER_PRODUCT SET
+			Product_Image_path=?
+			WHERE Seller_ID=? AND
+			Product_ID=?""",(img,seller_id,product_id))
+
+		self.connection.commit()
+
+
+
+	def update_seller_profile(self,id,img):
+		self.cus.execute("""UPDATE SELLER_ACCOUNTS SET
+			Profile_pic=?
+			WHERE Seller_ID=?""",(img,id1))
+
+		self.connection.commit()
+
+
+	def update_seller_name(self,id1,name):
+		self.cus.execute("""UPDATE SELLER_ACCOUNTS SET
+			Buisness_name=?
+			WHERE Seller_ID=?""",(name,id1))
+
+		self.connection.commit()
+
+	def update_seller_opening_time(self,id1,time):
+		self.cus.execute("""UPDATE SELLER_ACCOUNTS SET
+			Opening_time=?
+			WHERE Seller_ID=?""",(time,id1))
 
 		self.connection.commit()
 
@@ -198,10 +273,11 @@ class Delete_From_Table:
 		self.connection=conn
 		self.cus=self.connection.cursor()
 
-	def delete_seller_product(self,id1):
+	def delete_seller_product(self,id1,id2):
 		self.cus.execute("""DELETE FROM SELLER_PRODUCT
-			WHERE Product_ID = ?
-			""", (id1,))
+			WHERE Product_ID = ? AND
+			Seller_ID =?
+			""", (id1,id2))
 		self.connection.commit()
 
 
@@ -212,6 +288,19 @@ class Delete_From_Table:
 
 		self.connection.commit()
 
+	def delete_buyer_account(self,id1):
+		self.cus.execute("""DELETE FROM BUYER_ACCOUNTS
+			WHERE Buyer_ID = ?
+			""", (id1,))
+
+		self.connection.commit()
+
+	def delete_seller_account(self,id1):
+		self.cus.execute("""DELETE FROM SELLER_ACCOUNTS
+			WHERE Seller_ID = ?
+			""", (id1,))
+
+		self.connection.commit()
 
 
 class Get_From_Tables:
@@ -232,9 +321,10 @@ class Get_From_Tables:
 	def get_buyer_id_by_location(self,location):
 		self.cus.execute("""SELECT Buyer_ID FROM BUYER_ACCOUNTS WHERE
 			Location =? """,(location,))
-		data= self.cus.fetchone()
+		data= self.cus.fetchall()
 		if data:
-			return data[0]
+			buyer_ids=[row[0] for row in data]
+			return buyer_ids
 
 		else:
 			return None
@@ -253,9 +343,10 @@ class Get_From_Tables:
 	def get_seller_id_by_location(self,location):
 		self.cus.execute("""SELECT Seller_ID FROM SELLER_ACCOUNTS WHERE
 			Location =? """,(location,))
-		data= self.cus.fetchone()
+		data= self.cus.fetchall()
 		if data:
-			return data[0]
+			seller_ids=[row[0] for row in data]
+			return seller_ids
 
 		else:
 			return None
@@ -270,6 +361,15 @@ class Get_From_Tables:
 		else:
 			return None
 		
+	def get_seller_status(self,seller_id):
+		self.cus.execute("""SELECT Status FROM SELLER_ACCOUNTS WHERE
+			Seller_ID=? """,(seller_id,))
+		data= self.cus.fetchone()
+		if data:
+			return data[0]
+
+		else:
+			return None
 
 
 	def get_seller_id_by_name(self,name):
@@ -281,6 +381,63 @@ class Get_From_Tables:
 
 		else:
 			return None
+
+
+	def get_seller_rating(self,ID):
+		self.cus.execute("""SELECT Rating FROM SELLER_ACCOUNTS WHERE
+			Seller_ID=? """,(ID,))
+		data= self.cus.fetchone()
+		if data:
+			return data[0]
+
+		else:
+			return None
+
+
+
+	def get_seller_number_of_sales(self,ID):
+		self.cus.execute("""SELECT Number_of_sales FROM SELLER_ACCOUNTS WHERE
+			Seller_ID=? """,(ID,))
+		data= self.cus.fetchone()
+		if data:
+			return data[0]
+
+		else:
+			return None
+
+
+	def get_seller_name_by_id(self,ID):
+		self.cus.execute("""SELECT Buisness_name FROM SELLER_ACCOUNTS WHERE
+			Seller_ID =? """,(ID,))
+		data= self.cus.fetchone()
+		if data:
+			return data[0]
+
+		else:
+			return None
+
+
+
+	def get_product_id_by_name(self,name):
+		self.cus.execute("""SELECT Product_ID FROM PRODUCT WHERE
+			Product_name =? """,(name,))
+		data= self.cus.fetchone()
+		if data:
+			return data[0]
+
+		else:
+			return None
+
+	def get_product_name_by_id(self,ID):
+		self.cus.execute("""SELECT Product_name FROM PRODUCT WHERE
+			Product_ID =? """,(ID,))
+		data= self.cus.fetchone()
+		if data:
+			return data[0]
+
+		else:
+			return None
+
 
 
 
@@ -298,9 +455,10 @@ class Get_From_Tables:
 	def get_seller_id_from_seller_product_by_product_id(self,id1):
 		self.cus.execute("""SELECT Seller_ID FROM SELLER_PRODUCT WHERE
 			Product_ID =? """,(id1,))
-		data= self.cus.fetchone()
+		data= self.cus.fetchall()
 		if data:
-			return data[0]
+			seller_ids = [row[0] for row in data]
+			return seller_ids
 
 		else:
 			return None
@@ -310,18 +468,21 @@ class Get_From_Tables:
 	def get_product_id_from_seller_product_by_seller_id(self,id1):
 		self.cus.execute("""SELECT Product_ID FROM SELLER_PRODUCT WHERE
 			Seller_ID =? """,(id1,))
-		data= self.cus.fetchone()
+		data= self.cus.fetchall()
 		if data:
-			return data[0]
+			product_ids = [row[0] for row in data]
+			print(product_ids)
+			return product_ids
 
 		else:
 			return None
 		
 
 
-	def get_seller_product_qty(self,ID):
+	def get_seller_product_qty(self,ID,seller_id):
 		self.cus.execute("""SELECT Quantity FROM SELLER_PRODUCT WHERE
-			Product_ID =? """,(ID,))
+			Product_ID =? AND
+			Seller_ID=? """,(ID,seller_id))
 		data= self.cus.fetchone()
 		if data:
 			return data[0]
@@ -334,15 +495,28 @@ class Get_From_Tables:
 	def get_order_id_by_seller_id(self,ID):
 		self.cus.execute("""SELECT Order_ID FROM ORDERS WHERE
 			Seller_ID=? """,(ID,))
-		data= self.cus.fetchone()
+		data= self.cus.fetchall()
 		if data:
-			return data[0]
+			order_ids = [row[0] for row in data]
+			return order_ids
 
 		else:
 			return None
 
 	def get_order_id_by_product_id(self,ID):
 		self.cus.execute("""SELECT Order_ID FROM ORDERS WHERE
+			Product_ID=? """,(ID,))
+		data= self.cus.fetchall()
+		if data:
+			order_ids = [row[0] for row in data]
+			return order_ids
+
+		else:
+			return None
+
+
+	def get_product_qty(self,ID):
+		self.cus.execute("""SELECT Product_qty FROM PRODUCT WHERE
 			Product_ID=? """,(ID,))
 		data= self.cus.fetchone()
 		if data:
@@ -362,32 +536,62 @@ class Display_From_Table:
 		self.cus.execute("""SELECT * FROM SELLER_PRODUCT WHERE
 			Product_ID=? """,(ID,))
 		data= self.cus.fetchall()
-		print(data)
 		if data:
 			return data
-
 		else:
 			return None
 
+
+
+	def display_product_details_by_product_id_and_seller_id(self,ID1,ID2):
+		self.cus.execute("""SELECT * FROM SELLER_PRODUCT WHERE
+			Product_ID=? AND
+			Seller_ID=?""",(ID1,ID2,))
+		data= self.cus.fetchall()
+		products=[]
+		for row in data:
+			product=[]
+			product.append(row[2])
+			product.append(row[3])
+			product.append(row[4])
+			product.append(row[5])
+			product.append(row[6])
+			products.append(product)
+
+		if data:
+			return products
+		else:
+			return None
 
 
 	def display_seller_product_by_seller_id(self,ID):
 		self.cus.execute("""SELECT * FROM SELLER_PRODUCT WHERE
 			Seller_ID=? """,(ID,))
 		data= self.cus.fetchall()
-		print(data)
 		if data:
 			return data
 
 		else:
 			return None
 
+	def display_seller_product_by_seller_id_and_category(self,ID,category):
+		self.cus.execute("""SELECT * FROM SELLER_PRODUCT WHERE
+			Seller_ID=? AND
+			Category=? """,(ID,category,))
+		data= self.cus.fetchall()
+		if data:
+
+			return data
+
+		else:
+			return None
+
+
 
 	def display_orders_by_seller_id(self,ID):
 		self.cus.execute("""SELECT * FROM ORDERS WHERE
 			Seller_ID=? """,(ID,))
 		data= self.cus.fetchall()
-		print(data)
 		if data:
 			return data
 
@@ -400,7 +604,17 @@ class Display_From_Table:
 		self.cus.execute("""SELECT * FROM ORDERS WHERE
 			Product_ID=? """,(ID,))
 		data= self.cus.fetchall()
-		print(data)
+		if data:
+			return data
+
+		else:
+			return None
+
+
+	def display_order(self,ID):
+		self.cus.execute("""SELECT * FROM ORDERS WHERE
+			Order_ID=? """,(ID,))
+		data= self.cus.fetchall()
 		if data:
 			return data
 
@@ -413,20 +627,28 @@ class Display_From_Table:
 		self.cus.execute("""SELECT * FROM ORDERS WHERE
 			Buyer_ID=? """,(ID,))
 		data= self.cus.fetchall()
-		print(data)
 		if data:
 			return data
 
 		else:
 			return None
-
 
 
 	def display_history(self,ID):
 		self.cus.execute("""SELECT * FROM HISTORY WHERE
 			Buyer_ID=? """,(ID,))
 		data= self.cus.fetchall()
-		print(data)
+		if data:
+			return data
+
+		else:
+			return None
+
+
+	def display_seller_transactions(self,ID):
+		self.cus.execute("""SELECT * FROM HISTORY WHERE
+			Seller_ID=? """,(ID,))
+		data= self.cus.fetchall()
 		if data:
 			return data
 
@@ -436,16 +658,14 @@ class Display_From_Table:
 
 
 
-
 data=Create_Database(con)
-#data2=ADD_INTO_TABLES()
-#data2.add_into_buyer_account("Corn","yo@gmail.com","Yaounde",677334989,"HOSSI345","21-12-3")
-#data2.add_into_seller_account("Fotso","bosso","Supermarket",677978598,"Yownow@gmail.com","Shakiradelsui","Bastos","3:00",4,67,"12-12-12")
+#data2=ADD_INTO_TABLES(con)
+#data2.add_into_buyer_account("Corn","yo@gmail.com","Yaounde",677334989,"shuijj@hggh","21-12-3")
 
 #data2.add_into_Orders(2,3,6,400,34,455)
-#data2.add_into_History(4,5,566,555,"12-23-23")
-#data2.add_into_product("Gas",12)
-#data2.add_into_SellerProduct(3,5,"GIII","guii",677,788,"sdfsadf")
+#data2.add_into_History(1,9,1,566,555,"12-23-23")
+#data2.add_into_product("Vegetables",1700)
+#data2.add_into_SellerProduct(12,12,"GIII","guii",600,788,"sdfsadf")
 #data3=Update_Table()
 #data3.update_product("Gas",555)
 #data3.update_buyer_location(1,"Nyom")
@@ -453,9 +673,14 @@ data=Create_Database(con)
 #data4=Delete_From_Table()
 #data4.delete_order(1)
 #data4.delete_seller_product(5)
-#data5=Get_From_Tables()
+#data5=Get_From_Tables(con)
+#data5.get_product_id_from_seller_product_by_seller_id(2)
 #print("dsafaaaaaasdfaaaaaaaaaaa")
 #print(data5.get_buyer_id_by_email("yo@gmai"))
 #print("dsafaaaaaasdfaaaaaaaaaaa")
-#data6=Display_From_Table()
+#data6=Display_From_Table(con)
+#print(data6.display_seller_product_by_seller_id_and_category(12,"guii"))
 #data6.display_history(4)
+
+con.commit()
+con.close()
