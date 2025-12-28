@@ -1,12 +1,15 @@
+#This is Buyer_Login
 from Database_Manipulation import ADD_INTO_TABLES
 from Database_Manipulation import Get_From_Tables
 import re
 import os
+import sqlite3
+con= sqlite3.connect("GrabNGo_Database.db")
 
 class Buyer_Login:
-	def __init__(self):
-		self.account_adder=ADD_INTO_TABLES()
-		self.getter=Get_From_Tables()
+	def __init__(self,con):
+		self.account_adder=ADD_INTO_TABLES(con)
+		self.getter=Get_From_Tables(con)
 		print(os.path.abspath("GrabNGo_Database.db"))
 
 
@@ -56,7 +59,7 @@ class Buyer_Login:
 
 
 	def login(self,name,e_mail):
-		if self.getter.get_buyer_id_by_email(e_mail)== None:
+		if self.getter.get_buyer_id_by_email(e_mail) != None:
 			return 1
 
 		else:
@@ -64,9 +67,7 @@ class Buyer_Login:
 
 
 
-
-
-		
-
-login1=Buyer_Login()
+login1=Buyer_Login(con)
 login1.create_buyer_account("asind","ysh2jsdj@sdf.asd","buan",8998988,"as@es12g","12-23-23")
+con.commit()
+con.close()
