@@ -10,7 +10,6 @@ def Get_Database_connection():
 con=Get_Database_connection()
 con.execute("PRAGMA foreign_keys = ON")
 
-
 class Create_Database:
     def __init__(self, conn):
         try:
@@ -1255,3 +1254,4 @@ except Exception as e:
 finally:
     if 'con' in locals():
         con.close()
+
