@@ -1,0 +1,4345 @@
+#:import Factory kivy.factory.Factory
+
+# --- THEME DEFINITIONS ---
+#:set deep_midnight [0.08, 0.07, 0.15, 1]
+#:set soft_lavender [0.7, 0.6, 0.9, 1]
+#:set glass_panel [1, 1, 1, 0.05]
+#:set white [1, 1, 1, 1]
+
+
+# THIS LINE FIXES THE "INVALID DATA" ERRORS:
+#BuyerDashboard:
+#CartPage:
+# --- GLOBAL STYLES ---
+<GrabNGoLabel@Label>:
+    text: "GrabNGo"
+    font_size: "45sp"
+    bold: True
+    color: white
+    size_hint_y: None
+    height: "60dp"
+
+<HeaderBar@BoxLayout>:
+    size_hint_y: None
+    height: "50dp"
+    padding: ["10dp", "5dp"]
+    canvas.before:
+        Color:
+            rgba: [1, 1, 1, 0.03]
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Label:
+        text: "GrabNGo"
+        bold: True
+        font_size: "35sp"
+        color: soft_lavender
+        halign: "left"
+        text_size: self.size
+
+<CustomInput@TextInput>:
+    size_hint_x: 0.75
+    size_hint_y: None
+    height: "44dp"
+    multiline: False
+    padding: [15, 10]
+    background_normal: ""
+    background_active: ""
+    background_color: glass_panel
+    foreground_color: white
+    hint_text_color: [1, 1, 1, 0.3]
+    font_size: "14sp"
+    cursor_color: soft_lavender
+    canvas.after:
+        Color:
+            rgba: soft_lavender if self.focus else [1, 1, 1, 0.1]
+        Line:
+            width: 1
+            rounded_rectangle: (self.x, self.y, self.width, self.height, 6)
+
+<PrimaryButton@Button>:
+    size_hint: 0.4, None
+    height: "46dp"
+    background_normal: ""
+    background_color: 0,0,0,0
+    color: white
+    bold: True
+    pos_hint: {'center_x': 0.5}
+    canvas.before:
+        Color:
+            rgba: [0.35, 0.25, 0.6, 1] if self.state == 'normal' else [0.2, 0.15, 0.4, 1]
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [8,]
+
+<SecondaryButton@Button>:
+    size_hint: 0.4, None
+    height: "46dp"
+    background_normal: ""
+    background_color: 0,0,0,0
+    color: soft_lavender
+    pos_hint: {'center_x': 0.5}
+    canvas.before:
+        Color:
+            rgba: soft_lavender
+        Line:
+            width: 1.1
+            rounded_rectangle: (self.x, self.y, self.width, self.height, 8)
+
+# --- SCREENS ---
+# Add these definitions at the top of your KV file if not already there
+#:set bg_dark [0.05, 0.05, 0.07, 1]
+#:set accent_gold [1, 0.75, 0, 1]
+#:set glass_white [1, 1, 1, 0.04]
+#:set neon_blue [0, 0.7, 1, 1]
+#:set error_red [1, 0.3, 0.3, 1]
+
+<First_Page>:
+    canvas.before:
+        # Main Background
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        
+        # Decorative "High-Tech" Ambient Glow (Non-functional widget/graphic)
+        Color:
+            rgba: [0, 0.7, 1, 0.05]
+        Ellipse:
+            pos: self.width * 0.5, self.height * 0.6
+            size: self.width, self.width
+            
+    FloatLayout:
+        # --- TOP SECTION: Branding ---
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: (0.9, 0.4)
+            pos_hint: {'center_x': 0.5, 'top': 0.95}
+            spacing: "10dp"
+
+            Image:
+                source: "logo.png"
+                size_hint: (None, None)
+                size: ("120dp", "120dp")
+                pos_hint: {'center_x': 0.5}
+
+            GrabNGoLabel:
+                font_size: "42sp"
+                color: accent_gold
+                halign: "center"
+                bold: True
+
+            Label:
+                text: "Connecting you to a Global market"
+                color: [1, 1, 1, 0.4]
+                font_size: "14sp"
+                italic: True
+
+        # --- MIDDLE SECTION: Glass Box for Login ---
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: (0.85, 0.22)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.45}
+            padding: "20dp"
+            spacing: "15dp"
+            canvas.before:
+                Color:
+                    rgba: glass_white
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [20,]
+                Color:
+                    rgba: [1, 1, 1, 0.1]
+                Line:
+                    width: 1.1
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 20)
+
+            PrimaryButton:
+                text: "LOGIN AS BUYER"
+                on_press: app.root.current="buyer_login_page"
+                
+            PrimaryButton:
+                text: "LOGIN AS SELLER"
+                on_press: app.root.current="seller_login_page"
+
+        # --- BOTTOM SECTION: Accounts & Agent ---
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: (0.9, 0.25)
+            pos_hint: {'center_x': 0.5, 'y': 0.05}
+            spacing: "10dp"
+
+            Label:
+                text: "Don't have an account yet?"
+                font_size: "13sp"
+                color: [1, 1, 1, 0.5]
+                size_hint_y: None
+                height: "20dp"
+
+            BoxLayout:
+                spacing: "10dp"
+                size_hint_y: None
+                height: "45dp"
+                
+                PrimaryButton:
+                    text: "Create Buyer Account"
+                    font_size: "12sp"
+                    on_press: app.root.current="create_buyer_account_page"
+                
+                PrimaryButton:
+                    text: "Create SELLER Account"
+                    font_size: "12sp"
+                    on_press: app.root.current="create_seller_account_page"
+
+            Widget:
+                size_hint_y: None
+                height: "10dp"
+
+            # Agent Login positioned as a subtle tech-link
+            Button:
+                text: "INTERNAL: DELIVERY AGENT ACCESS"
+                size_hint: (0.6, None)
+                height: "30dp"
+                pos_hint: {'center_x': 0.5}
+                background_color: 0, 0, 0, 0
+                color: neon_blue
+                font_size: "11sp"
+                underline: True
+                on_press: app.root.current="delivery_agent_login_page"
+
+# Using the same color system for coherence:
+# bg_dark, accent_gold, glass_white, neon_blue
+
+<Buyer_Login_Page>:
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        
+        # --- NEW: Tech Decorative Element (Non-useful glass circle) ---
+        Color:
+            rgba: [0, 0.7, 1, 0.03]
+        Ellipse:
+            pos: self.width * -0.2, self.height * 0.4
+            size: self.width, self.width
+        Color:
+            rgba: [1, 0.75, 0, 0.02]
+        Ellipse:
+            pos: self.width * 0.5, self.height * -0.1
+            size: self.width * 0.8, self.width * 0.8
+
+    BoxLayout:
+        orientation: "vertical"
+        
+        # Header with back button
+        FloatLayout:
+            size_hint_y: None
+            height: "80dp"
+            SecondaryButton:
+                text: "BACK" # Replaced << with text for a more mature feel
+                size_hint: None, None
+                size: "80dp", "40dp"
+                pos_hint: {'center_y': 0.5, 'x': 0.05}
+                on_press: app.root.current = "first_page"
+                font_size: "12sp"
+            
+            Label:
+                text: "BUYER PORTAL"
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                font_size: "14sp"
+                color: accent_gold
+                bold: True
+                letter_spacing: 2
+
+        BoxLayout:
+            orientation: "vertical"
+            padding: ["30dp", "20dp"]
+            spacing: "20dp"
+
+            # Welcome Message
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: "80dp"
+                Label:
+                    text: "Welcome Back"
+                    font_size: "32sp"
+                    bold: True
+                    color: [1, 1, 1, 1]
+                    halign: "center"
+                Label:
+                    text: "Sign in to continue with the global market"
+                    font_size: "14sp"
+                    color: [1, 1, 1, 0.4]
+                    halign: "center"
+
+            # --- THE GLASS LOGIN CARD ---
+            BoxLayout:
+                orientation: "vertical"
+                padding: "20dp"
+                spacing: "15dp"
+                size_hint_y: None
+                height: self.minimum_height
+                canvas.before:
+                    Color:
+                        rgba: glass_white
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25,]
+                    Color:
+                        rgba: [1, 1, 1, 0.08]
+                    Line:
+                        width: 1.1
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 25)
+
+                CustomInput:
+                    id: buyer_login_name
+                    hint_text: "Full Name"
+                    size_hint_y: None
+                    height: "50dp"
+                
+                CustomInput:
+                    id: buyer_login_email
+                    hint_text: "Email Address"
+                    size_hint_y: None
+                    height: "50dp"
+
+                CustomInput:
+                    id: buyer_login_password
+                    hint_text: "Password"
+                    password: True
+                    size_hint_y: None
+                    height: "50dp"
+
+                # Feedback Messages (Dynamic)
+                Label:
+                    text: root.answer_to_password_forgotten if root.answer_to_password_forgotten else root.login_text
+                    color: [0.3, 1, 0.3, 1] if "Success" in root.login_text else [1, 0.3, 0.3, 1]
+                    font_size: "13sp"
+                    size_hint_y: None
+                    height: "20dp" if self.text else 0
+
+            # --- ACTIONS SECTION ---
+            BoxLayout:
+                orientation: "vertical"
+                spacing: "10dp"
+                size_hint_y: None
+                height: "150dp"
+
+                Button:
+                    text: "FORGOT PASSWORD?"
+                    background_color: 0,0,0,0
+                    color: [1, 0.75, 0, 0.6] # Muted Gold
+                    font_size: "14sp"
+                    size_hint_y: None
+                    height: "30dp"
+                    on_press: root.fogot_password()
+
+                PrimaryButton:
+                    text: "LOGIN TO ACCOUNT"
+                    size_hint_y: None
+                    height: "55dp"
+                    on_press: root.Buyer_Loginto_app()
+
+                Button:
+                    text: "NEW USER? CREATE ACCOUNT"
+                    background_color: 0,0,0,0
+                    color: neon_blue
+                    font_size: "13sp"
+                    size_hint_y: None
+                    height: "30dp"
+                    on_press: app.root.current = "create_buyer_account_page"
+            
+            # Non-useful filler widget to push content up
+            Widget:
+                size_hint_y: 1
+
+# Coherent System: bg_dark, accent_gold, glass_white, neon_blue
+
+<Seller_Login_Page>:
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        
+        # --- HIGH-TECH DECORATIVE WIDGET (Abstract Grid) ---
+        Color:
+            rgba: [1, 0.75, 0, 0.03] # Very faint gold grid
+        Line:
+            points: [0, self.height*0.3, self.width, self.height*0.35]
+        Line:
+            points: [0, self.height*0.35, self.width, self.height*0.3]
+        Color:
+            rgba: [0, 0.7, 1, 0.05]
+        Ellipse:
+            pos: self.width * 0.6, self.height * 0.7
+            size: self.width * 0.5, self.width * 0.5
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: ["20dp", "10dp"]
+
+        # --- TOP NAVIGATION BAR ---
+        FloatLayout:
+            size_hint_y: None
+            height: "60dp"
+            SecondaryButton:
+                text: "ESC" # "Escape" feels more high-tech than "<<"
+                size_hint: None, None
+                size: "60dp", "35dp"
+                pos_hint: {'center_y': 0.5, 'x': 0}
+                on_press: app.root.current = "first_page"
+                font_size: "11sp"
+            
+            Label:
+                text: "MERCHANT Account Login"
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                font_size: "12sp"
+                color: accent_gold
+                bold: True
+                letter_spacing: 3
+
+        ScrollView:
+            do_scroll_x: False
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                padding: ["10dp", "20dp"]
+                spacing: "20dp"
+
+                # --- GLASS BRANDING BOX ---
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: "220dp"
+                    padding: "20dp"
+                    canvas.before:
+                        Color:
+                            rgba: glass_white
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [30, 30, 5, 5] # Asymmetric tech look
+
+                    Image:
+                        source: "logo.png"
+                        size_hint: None, None
+                        size: "100dp", "100dp"
+                        pos_hint: {'center_x': 0.5}
+                    
+                    Label:
+                        text: "Merchant Access"
+                        font_size: "26sp"
+                        bold: True
+                        color: [1, 1, 1, 1]
+                    Label:
+                        text: "SECURE BUSINESS UPLINK"
+                        font_size: "11sp"
+                        color: neon_blue
+                        letter_spacing: 2
+
+                # --- INPUT PANEL ---
+                BoxLayout:
+                    orientation: "vertical"
+                    spacing: "12dp"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    padding: ["15dp", "0dp"]
+
+                    CustomInput:
+                        id: seller_login_name
+                        hint_text: "Full Name"
+                        size_hint_y: None
+                        height: "50dp"
+                    
+                    CustomInput:
+                        id: seller_login_email
+                        hint_text: "Business Email Address"
+                        size_hint_y: None
+                        height: "50dp"
+
+                    CustomInput:
+                        id: seller_login_password
+                        hint_text: "Access Key (Password)"
+                        password: True
+                        size_hint_y: None
+                        height: "50dp"
+
+                # --- FOOTER ACTIONS ---
+                BoxLayout:
+                    orientation: "vertical"
+                    spacing: "15dp"
+                    size_hint_y: None
+                    height: "180dp"
+                    padding: ["15dp", "10dp"]
+
+                    # Password Recovery Link
+                    Button:
+                        text: "Fogot Password"
+                        background_color: 0,0,0,0
+                        color: [1, 0.3, 0.3, 0.7]
+                        font_size: "12sp"
+                        bold: True
+                        size_hint_y: None
+                        height: "30dp"
+                        on_press: root.forgot_password()
+
+                    # Dynamic Status Messages
+                    Label:
+                        text: root.login_text if root.login_text else root.answer_to_password_forgotten
+                        color: [0, 1, 0.5, 1] if "Success" in root.login_text else [1, 0.84, 0, 1]
+                        font_size: "13sp"
+                        bold: True
+                        italic: True
+
+                    PrimaryButton:
+                        text: "LOGIN"
+                        size_hint_y: None
+                        height: "55dp"
+                        on_press: root.Seller_Loginto_app()
+                        # Extra style hint: You can add a subtle border in your PrimaryButton class
+
+# Coherent System: bg_dark, accent_gold, glass_white, neon_blue
+
+<Delivery_Agent_Login_Page>:
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        
+        # --- NON-USEFUL TECH DECOR (HUD Circles) ---
+        Color:
+            rgba: neon_blue
+        Line:
+            width: 1
+            circle: (self.width, 0, self.width * 0.4) # Bottom right glow
+        Color:
+            rgba: [0, 0.7, 1, 0.03]
+        Ellipse:
+            pos: self.width * 0.7, -self.width * 0.2
+            size: self.width * 0.6, self.width * 0.6
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: ["20dp", "10dp"]
+
+        # --- NAVIGATION HEADER ---
+        FloatLayout:
+            size_hint_y: None
+            height: "60dp"
+            SecondaryButton:
+                text: "BACK"
+                size_hint: None, None
+                size: "70dp", "35dp"
+                pos_hint: {'center_y': 0.5, 'x': 0}
+                on_press: app.root.current = "first_page"
+                font_size: "11sp"
+            
+            Label:
+                text: "Delivery Agent"
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                font_size: "12sp"
+                color: neon_blue
+                bold: True
+                letter_spacing: 4
+
+        ScrollView:
+            do_scroll_x: False
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                padding: ["10dp", "10dp"]
+                spacing: "20dp"
+
+                # --- AGENT ICON & WELCOME ---
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: "180dp"
+                    spacing: "10dp"
+                    
+                    Image:
+                        source: "logo.png"
+                        size_hint: None, None
+                        size: "90dp", "90dp"
+                        pos_hint: {'center_x': 0.5}
+                    
+                    Label:
+                        text: "Agent Authentication"
+                        font_size: "24sp"
+                        bold: True
+                        color: [1, 1, 1, 1]
+                    Label:
+                        text: "CONNECTING TO DELIVERY NETWORK..."
+                        font_size: "10sp"
+                        color: neon_blue
+                        italic: True
+
+                # --- GLASS AUTHENTICATION CARD ---
+                BoxLayout:
+                    orientation: "vertical"
+                    padding: "25dp"
+                    spacing: "15dp"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    canvas.before:
+                        Color:
+                            rgba: glass_white
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [20,]
+                        Color:
+                            rgba: [0, 0.7, 1, 0.15] # Neon blue subtle border
+                        Line:
+                            width: 1.2
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 20)
+
+                    CustomInput:
+                        id: delivery_agent_name
+                        hint_text: "Full Name"
+                        size_hint_y: None
+                        height: "50dp"
+                    
+                    CustomInput:
+                        id: delivery_agent_id
+                        hint_text: "Assigned Agent ID"
+                        size_hint_y: None
+                        height: "50dp"
+
+                    CustomInput:
+                        id: delivery_agent_location
+                        hint_text: "Current Operating Zone"
+                        size_hint_y: None
+                        height: "50dp"
+
+                # --- STATUS & ACTION ---
+                BoxLayout:
+                    orientation: "vertical"
+                    spacing: "15dp"
+                    size_hint_y: None
+                    height: "140dp"
+                    padding: ["20dp", "10dp"]
+
+                    Label:
+                        text: root.agent_login_text
+                        color: [0, 1, 0.5, 1] if "Success" in root.agent_login_text else [1, 0.3, 0.3, 1]
+                        font_size: "13sp"
+                        bold: True
+
+                    PrimaryButton:
+                        text: "AUTHORIZE & CONNECT"
+                        size_hint_y: None
+                        height: "55dp"
+                        on_press: root.Delivery_agent_Loginto_app()
+                        # Visual note: Use your neon_blue accent here instead of Gold for Agents
+
+                # Space at the bottom
+                Widget:
+                    size_hint_y: None
+                    height: "40dp"
+
+
+# Coherent System: bg_dark, accent_gold, glass_white, neon_blue
+
+<Create_Buyer_Account_Page>:
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        
+        # --- NON-USEFUL TECH DECOR (Floating Data Mesh) ---
+        Color:
+            rgba: [1, 0.75, 0, 0.04]
+        Ellipse:
+            pos: self.width * 0.6, self.height * 0.1
+            size: self.width * 0.6, self.width * 0.6
+        Color:
+            rgba: [0, 0.7, 1, 0.02]
+        Line:
+            circle: (0, self.height, self.width * 0.5)
+            width: 1.5
+
+    BoxLayout:
+        orientation: "vertical"
+        
+        # --- MODERN HEADER BAR ---
+        FloatLayout:
+            size_hint_y: None
+            height: "70dp"
+            canvas.before:
+                Color:
+                    rgba: [1, 1, 1, 0.02]
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            SecondaryButton:
+                text: "BACK"
+                size_hint: None, None
+                size: "70dp", "35dp"
+                pos_hint: {'center_y': 0.5, 'x': 0.05}
+                on_press: app.root.current = "first_page"
+                font_size: "11sp"
+            
+            Label:
+                text: "CREATE IDENTITY"
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                font_size: "13sp"
+                color: accent_gold
+                bold: True
+                letter_spacing: 3
+
+        ScrollView:
+            do_scroll_x: False
+            bar_width: 0  # Clean look
+            BoxLayout:
+                orientation: "vertical"
+                padding: ["25dp", "20dp"]
+                spacing: "20dp"
+                size_hint_y: None
+                height: self.minimum_height
+
+                # Welcome Title
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: "60dp"
+                    Label:
+                        text: "Join the Network"
+                        font_size: "28sp"
+                        bold: True
+                        halign: "left"
+                        text_size: self.size
+                    Label:
+                        text: "Complete your profile to get conneted to the Network"
+                        font_size: "14sp"
+                        color: [1, 1, 1, 0.4]
+                        halign: "left"
+                        text_size: self.size
+
+                # --- THE REGISTRATION GLASS CARD ---
+                BoxLayout:
+                    orientation: "vertical"
+                    padding: "20dp"
+                    spacing: "12dp"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    canvas.before:
+                        Color:
+                            rgba: glass_white
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [25,]
+                        Color:
+                            rgba: [1, 1, 1, 0.1]
+                        Line:
+                            width: 1.1
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 25)
+
+                    CustomInput:
+                        id: buyer_create_account_name
+                        hint_text: "Full Name"
+                        size_hint_y: None
+                        height: "50dp"
+
+                    CustomInput:
+                        id: buyer_create_account_email
+                        hint_text: "Email Address"
+                        size_hint_y: None
+                        height: "50dp"
+
+                    CustomInput:
+                        id: buyer_create_account_password
+                        hint_text: "Secure Password"
+                        password: True
+                        size_hint_y: None
+                        height: "50dp"
+
+                    CustomInput:
+                        id: buyer_create_account_location
+                        hint_text: "City / Region"
+                        size_hint_y: None
+                        height: "50dp"
+
+                    CustomInput:
+                        id: buyer_create_account_phone
+                        hint_text: "Phone Number"
+                        size_hint_y: None
+                        height: "50dp"
+
+                # --- FOOTER SECTION ---
+                BoxLayout:
+                    orientation: "vertical"
+                    spacing: "10dp"
+                    size_hint_y: None
+                    height: "120dp"
+
+                    Label:
+                        text: root.login_text
+                        font_size: "14sp"
+                        bold: True
+                        color: [0, 1, 0.5, 1] if "Success" in self.text else [1, 0.8, 0, 1]
+                        size_hint_y: None
+                        height: "40dp"
+
+                    PrimaryButton:
+                        text: "CONFIRM REGISTRATION"
+                        size_hint_y: None
+                        height: "55dp"
+                        on_press: root.buyer_create_account()
+
+                # Filler
+                Widget:
+                    size_hint_y: None
+                    height: "30dp"
+
+
+# Coherent System: bg_dark, accent_gold, glass_white, neon_blue
+
+<Create_Seller_Account_Page>:
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        
+        # --- TECH DECOR: Digital Grid & Scan Lines ---
+        Color:
+            rgba: [1, 0.75, 0, 0.02]
+        Line:
+            points: [0, self.height * 0.5, self.width, self.height * 0.52]
+            width: 1
+        Line:
+            points: [0, self.height * 0.52, self.width, self.height * 0.5]
+            width: 1
+        Color:
+            rgba: [1, 1, 1, 0.01]
+        Rectangle:
+            pos: 0, self.height * 0.4
+            size: self.width, dp(100)
+
+    BoxLayout:
+        orientation: "vertical"
+        
+        # --- CUSTOM TOP NAVIGATION ---
+        FloatLayout:
+            size_hint_y: None
+            height: "70dp"
+            SecondaryButton:
+                text: "ESC"
+                size_hint: None, None
+                size: "65dp", "35dp"
+                pos_hint: {'center_y': 0.5, 'x': 0.05}
+                on_press: app.root.current = "first_page"
+                font_size: "11sp"
+            
+            Label:
+                text: "MERCHANT UPLINK"
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                font_size: "12sp"
+                color: accent_gold
+                bold: True
+                letter_spacing: 4
+
+        ScrollView:
+            do_scroll_x: False
+            BoxLayout:
+                orientation: "vertical"
+                padding: ["25dp", "10dp"]
+                spacing: "20dp"
+                size_hint_y: None
+                height: self.minimum_height
+
+                # --- BUSINESS HEADER ---
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: None
+                    height: "80dp"
+                    BoxLayout:
+                        orientation: "vertical"
+                        Label:
+                            text: "Business Registration"
+                            font_size: "24sp"
+                            bold: True
+                            halign: "left"
+                            text_size: self.size
+                        Label:
+                            text: "ESTABLISHING MERCHANT PROTOCOLS..."
+                            font_size: "10sp"
+                            color: accent_gold
+                            halign: "left"
+                            text_size: self.size
+                    
+                    # Decorative "Verified" Glass Icon
+                    Widget:
+                        size_hint_x: None
+                        width: dp(50)
+                        canvas:
+                            Color:
+                                rgba: [1, 0.75, 0, 0.1]
+                            Ellipse:
+                                pos: self.pos
+                                size: self.size
+                            Color:
+                                rgba: accent_gold
+                            Line:
+                                width: 1.2
+                                circle: (self.center_x, self.center_y, dp(20))
+
+                # --- THE MERCHANT GLASS CARD ---
+                BoxLayout:
+                    orientation: "vertical"
+                    padding: "20dp"
+                    spacing: "15dp"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    canvas.before:
+                        Color:
+                            rgba: glass_white
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5, 30, 5, 30] # Sharp industrial corners
+                        Color:
+                            rgba: [1, 0.75, 0, 0.1]
+                        Line:
+                            width: 1.1
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 30)
+
+                    CustomInput:
+                        id: seller_create_accuont_name
+                        hint_text: "Legal Merchant Name"
+                        size_hint_y: None
+                        height: "50dp"
+
+                    CustomInput:
+                        id: seller_create_account_email
+                        hint_text: "Professional Email"
+                        size_hint_y: None
+                        height: "50dp"
+
+                    CustomInput:
+                        id: seller_create_account_password
+                        hint_text: "Administrative Password"
+                        password: True
+                        size_hint_y: None
+                        height: "50dp"
+
+                    CustomInput:
+                        id: seller_create_account_location
+                        hint_text: "HQ / Store Address"
+                        size_hint_y: None
+                        height: "50dp"
+
+                    CustomInput:
+                        id: seller_create_account_phone
+                        hint_text: "Business Contact Line"
+                        size_hint_y: None
+                        height: "50dp"
+
+                # --- SUBMIT SECTION ---
+                BoxLayout:
+                    orientation: "vertical"
+                    spacing: "15dp"
+                    size_hint_y: None
+                    height: "140dp"
+                    padding: [0, "10dp"]
+
+                    Label:
+                        text: root.login_text
+                        font_size: "14sp"
+                        bold: True
+                        color: [0.3, 1, 0.5, 1] if "Success" in self.text else accent_gold
+                        halign: "center"
+
+                    PrimaryButton:
+                        text: "LAUNCH MERCHANT ACCOUNT"
+                        size_hint_y: None
+                        height: "55dp"
+                        on_press: root.seller_create_account()
+
+                Widget:
+                    size_hint_y: None
+                    height: "40dp"
+
+
+<AnalyticsTile@BoxLayout>:
+    orientation: "vertical"
+    padding: "10dp"
+    spacing: "15dp"
+    size_hint: (0.4,0.4)
+    title: ""
+    value: ""
+    canvas.before:
+        Color:
+            rgba: glass_panel
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [10,]
+    Label:
+        text: root.title
+        font_size: "12sp"
+        color: soft_lavender
+    Label:
+        text: root.value
+        font_size: "15sp"
+        color: [0.3, 1, 0.5, 1]
+        bold: True
+
+<ProfileDetailLabel@BoxLayout>:
+    key: ""
+    value: ""
+    size_hint_y: None
+    height: "40dp"
+    size_hint_x: 0.85
+    pos_hint: {'center_x': 0.5}
+    Label:
+        text: root.key
+        color: soft_lavender
+        font_size: "16sp"
+        halign: "left"
+        text_size: self.size
+    Label:
+        text: root.value
+        font_size: "18sp"
+        bold: True
+        color: [0.85, 0.75, 0.45, 1]
+        halign: "right"
+        text_size: self.size
+# Coherent System: bg_dark, accent_gold, glass_white, neon_blue
+
+<Buyer_Profile_Page>:
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        
+        # --- DECORATIVE TECH WIDGET (Security Pulse) ---
+        Color:
+            rgba: neon_blue
+        Line:
+            width: 1.1
+            circle: (self.width * 0.9, self.height * 0.8, dp(60))
+        Color:
+            rgba: [0, 0.7, 1, 0.05]
+        Ellipse:
+            pos: self.width * 0.75, self.height * 0.72
+            size: dp(120), dp(120)
+
+    BoxLayout:
+        orientation: "vertical"
+        
+        # --- NAVIGATION HEADER ---
+        FloatLayout:
+            size_hint_y: None
+            height: "70dp"
+            canvas.before:
+                Color:
+                    rgba: [1, 1, 1, 0.03]
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            SecondaryButton:
+                text: "ESC"
+                size_hint: None, None
+                size: "65dp", "35dp"
+                pos_hint: {'center_y': 0.5, 'x': 0.05}
+                on_press: app.root.current = "buyerdashboard"
+                font_size: "11sp"
+            
+            Label:
+                text: "USER IDENTITY"
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                font_size: "12sp"
+                color: accent_gold
+                bold: True
+                letter_spacing: 3
+
+        ScrollView:
+            do_scroll_x: False
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                padding: ["20dp", "10dp"]
+                spacing: "20dp"
+
+                # --- TOP IDENTITY CARD ---
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: "140dp"
+                    padding: "20dp"
+                    spacing: "5dp"
+                    canvas.before:
+                        Color:
+                            rgba: glass_white
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [25, 25, 0, 0] # Modern tab look
+                        Color:
+                            rgba: [0, 0.7, 1, 0.2]
+                        Line:
+                            width: 1.2
+                            points: [self.x + dp(20), self.y + dp(5), self.right - dp(20), self.y + dp(5)]
+
+                    Label:
+                        text: "PROFILE STATUS: [color=00ff66]ACTIVE[/color]"
+                        markup: True
+                        font_size: "10sp"
+                        color: [1, 1, 1, 0.5]
+                        bold: True
+                        halign: "left"
+                        text_size: self.size
+                    
+                    Label:
+                        text: app.buyer_name.upper()
+                        font_size: "28sp"
+                        color: [1, 1, 1, 1]
+                        bold: True
+                        halign: "left"
+                        text_size: self.size
+                    
+                    Label:
+                        text: "Verified GrabNGo Buyer"
+                        font_size: "13sp"
+                        color: neon_blue
+                        halign: "left"
+                        text_size: self.size
+
+                # --- INFO MATRIX (The Details) ---
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    padding: "20dp"
+                    spacing: "15dp"
+                    canvas.before:
+                        Color:
+                            rgba: glass_white
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [0, 0, 25, 25]
+
+                    ProfileDetailLabel:
+                        key: " EMAIL"
+                        value: app.buyer_email
+                    
+                    # Horizontal Line Separator
+                    Widget:
+                        size_hint_y: None
+                        height: "1dp"
+                        canvas:
+                            Color:
+                                rgba: [1, 1, 1, 0.05]
+                            Rectangle:
+                                pos: self.pos
+                                size: self.size
+
+                    ProfileDetailLabel:
+                        key: "ACCESS KEY (Password)"
+                        value: "********" # Modern apps don't show passwords in plain text
+                    
+                    Widget:
+                        size_hint_y: None
+                        height: "1dp"
+                        canvas:
+                            Color:
+                                rgba: [1, 1, 1, 0.05]
+                            Rectangle:
+                                pos: self.pos
+                                size: self.size
+
+                    ProfileDetailLabel:
+                        key: "PRIMARY ZONE(Location)"
+                        value: app.buyer_location
+
+                    Widget:
+                        size_hint_y: None
+                        height: "1dp"
+                        canvas:
+                            Color:
+                                rgba: [1, 1, 1, 0.05]
+                            Rectangle:
+                                pos: self.pos
+                                size: self.size
+
+                    ProfileDetailLabel:
+                        key: "UPLINK PHONE(Contact)"
+                        value: str(app.buyer_phone)
+
+                # --- ACTION CENTER ---
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: "12dp"
+                    padding: [0, "10dp"]
+
+                    PrimaryButton:
+                        text: "UPDATE LOCATION"
+                        size_hint_y: None
+                        height: "50dp"
+                        on_release: Factory.BuyerLocationPopup().open()
+
+                    
+                    SecondaryButton:
+                        text: "TRANSACTION ARCHIVE"
+                        size_hint_y: None
+                        height: "50dp"
+                        on_press: app.root.current="buyerhistorypage"
+                       
+
+                    # High-Warning Action
+                    Button:
+                        text: "TERMINATE ACCOUNT"
+                        size_hint_y: None
+                        height: "40dp"
+                        background_color: 0,1,0,0
+                        color: [1, 0.3, 0.3, 0.6]
+                        font_size: "12sp"
+                        bold: True
+                        on_press: root.delete_buyer_account()
+
+                Widget:
+                    size_hint_y: None
+                    height: "30dp"
+
+# Coherent System: bg_dark, accent_gold, glass_white, neon_blue
+
+<Seller_Profile_Page>:
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        
+        # --- NON-USEFUL TECH DECOR (Data Mesh Silhouette) ---
+        Color:
+            rgba: [1, 0.75, 0, 0.03]
+        Line:
+            points: [self.width*0.1, self.height*0.2, self.width*0.3, self.height*0.4, self.width*0.6, self.height*0.1, self.width*0.9, self.height*0.3]
+            width: 1.2
+        Color:
+            rgba: [0, 0.7, 1, 0.05]
+        Ellipse:
+            pos: self.width * -0.1, self.height * 0.5
+            size: self.width * 0.4, self.width * 0.4
+
+    BoxLayout:
+        orientation: "vertical"
+        
+        # --- TOP HEADER NAVIGATION ---
+        FloatLayout:
+            size_hint_y: None
+            height: "70dp"
+            canvas.before:
+                Color:
+                    rgba: [1, 1, 1, 0.02]
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            SecondaryButton:
+                text: "ESC"
+                size_hint: None, None
+                size: "65dp", "35dp"
+                pos_hint: {'center_y': 0.5, 'x': 0.05}
+                on_press: app.root.current = "seller_manager_page"
+                font_size: "11sp"
+            
+            Label:
+                text: "MERCHANT Account"
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                font_size: "12sp"
+                color: accent_gold
+                bold: True
+                letter_spacing: 4
+
+        ScrollView:
+            do_scroll_x: False
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                padding: ["20dp", "10dp"]
+                spacing: "20dp"
+
+                # --- 1. PERSONAL INFO GLASS CARD ---
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    padding: "20dp"
+                    spacing: "12dp"
+                    canvas.before:
+                        Color:
+                            rgba: glass_white
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [25, 25, 5, 5]
+                        Color:
+                            rgba: [1, 1, 1, 0.05]
+                        Line:
+                            width: 1
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 25)
+
+                    Label:
+                        text: "OPERATOR IDENTITY"
+                        font_size: "11sp"
+                        color: neon_blue
+                        bold: True
+                        halign: "left"
+                        text_size: self.size
+
+                    ProfileDetailLabel:
+                        key: "NAME"
+                        value: app.seller_name
+                    ProfileDetailLabel:
+                        key: "EMAIL"
+                        value: app.seller_email
+                    ProfileDetailLabel:
+                        key: "KEY"
+                        value: "********"
+                    ProfileDetailLabel:
+                        key: "ZONE"
+                        value: app.seller_location
+
+                # --- 2. BUSINESS METRICS GLASS CARD ---
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    padding: "20dp"
+                    spacing: "12dp"
+                    canvas.before:
+                        Color:
+                            rgba: [1, 1, 1, 0.05] # Slightly different tint
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5, 5, 25, 25]
+
+                    Label:
+                        text: "COMMERCIAL METRICS"
+                        font_size: "11sp"
+                        color: accent_gold
+                        bold: True
+                        halign: "left"
+                        text_size: self.size
+
+                    ProfileDetailLabel:
+                        key: "Buisness Name"
+                        value: str(app.buisness_name)
+                    ProfileDetailLabel:
+                        key: "Buisness Type"
+                        value: str(app.buisness_type)
+                    ProfileDetailLabel:
+                        key: "RATING"
+                        value: "⭐ " + str(app.seller_rating)
+                    ProfileDetailLabel:
+                        key: "Opening Time"
+                        value: str(app.seller_opening_time)
+                    ProfileDetailLabel:
+                        key: "Total number of Sales"
+                        value: str(app.seller_number_of_sales) + " UNITS"
+
+                # --- 3. ACTION GRID ---
+                GridLayout:
+                    cols: 2
+                    spacing: "10dp"
+                    size_hint_y: None
+                    height: "180dp"
+
+                    PrimaryButton:
+                        text: "ANALYTICS"
+                        on_press: app.root.current="get_store_annalytic_page"
+                    
+                    PrimaryButton:
+                        text: "UPDATE"
+                        on_press: root.open_seller_info_update_popup()
+                    
+                    SecondaryButton:
+                        text: "HISTORY"
+                        on_press: app.root.current="sellerhistorypage"
+                    
+                    PrimaryButton:
+                        text: "AGENTS"
+                        on_press: app.root.current="deliver_manager_page"
+
+                # Dangerous action at the bottom
+                Button:
+                    text: "TERMINATE MERCHANT UPLINK"
+                    size_hint_y: None
+                    height: "45dp"
+                    background_color: 0,0,0,0
+                    color: [1, 0.3, 0.3, 0.6]
+                    font_size: "11sp"
+                    bold: True
+
+                Widget:
+                    size_hint_y: None
+                    height: "30dp"
+
+
+# Coherent System: bg_dark, accent_gold, glass_white, neon_blue
+
+<Get_store_Annalytic_Page>:
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        
+        # --- TECH DECOR: Analytics Pulse Wave ---
+        Color:
+            rgba: [0, 0.7, 1, 0.05]
+        Line:
+            width: 1.5
+            bezier: [0, self.height*0.2, self.width*0.3, self.height*0.25, self.width*0.5, self.height*0.15, self.width, self.height*0.2]
+
+    BoxLayout:
+        orientation: "vertical"
+        
+        # --- HEADER NAVIGATION ---
+        FloatLayout:
+            size_hint_y: None
+            height: "70dp"
+            canvas.before:
+                Color:
+                    rgba: [1, 1, 1, 0.02]
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            SecondaryButton:
+                text: "EXIT"
+                size_hint: None, None
+                size: "65dp", "35dp"
+                pos_hint: {'center_y': 0.5, 'x': 0.05}
+                on_press: app.root.current = "seller_manager_page"
+                font_size: "11sp"
+            
+            Label:
+                text: "REVENUE INTELLIGENCE"
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                font_size: "12sp"
+                color: accent_gold
+                bold: True
+                letter_spacing: 3
+
+        ScrollView:
+            do_scroll_x: False
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                padding: ["20dp", "10dp"]
+                spacing: "25dp"
+
+                # --- 1. INCOME GRID (MODULAR TILES) ---
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: "220dp"
+                    spacing: "15dp"
+                    
+                    Label:
+                        text: "PERFORMANCE Review"
+                        font_size: "11sp"
+                        color: [1, 1, 1, 0.4]
+                        bold: True
+                        halign: "left"
+                        text_size: self.size
+
+                    GridLayout:
+                        cols: 2
+                        spacing: "12dp"
+                        AnalyticsTile:
+                            title: "DAILY YIELD"
+                            value:"CFA " + str(root.daily_income) # Added currency symbol
+                            # Style Tip: AnalyticsTile should have a glass_white background
+                        AnalyticsTile:
+                            title: "WEEKLY YIELD"
+                            value: "CFA " + str(root.weekly_income)
+                        AnalyticsTile:
+                            title: "MONTHLY"
+                            value: "CFA " + str(root.monthly_income)
+                        AnalyticsTile:
+                            title: "ANNUAL"
+                            value: "CFA " + str(root.yearly_income)
+
+                # --- 2. PRODUCT PERFORMANCE (GLASS PANEL) ---
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    padding: "25dp"
+                    spacing: "20dp"
+                    canvas.before:
+                        Color:
+                            rgba: glass_white
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [25,]
+                        Color:
+                            rgba: [0, 0.7, 1, 0.1] # Subtle neon glow border
+                        Line:
+                            width: 1.1
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 25)
+
+                    # Most Sold Section
+                    BoxLayout:
+                        orientation: "vertical"
+                        size_hint_y: None
+                        height: "90dp"
+                        Label:
+                            text: "TOP PERFORMING UNIT"
+                            color: neon_blue
+                            font_size: "11sp"
+                            bold: True
+                            halign: "left"
+                            text_size: self.size
+                        Label:
+                            text: root.most_sold_product
+                            font_size: "20sp"
+                            bold: True
+                            color: [1, 1, 1, 1]
+                            halign: "left"
+                            text_size: self.size
+                        Label:
+                            text: "Total Volume: " + str(root.max_qty) + " units"
+                            font_size: "13sp"
+                            color: [1, 1, 1, 0.5]
+                            halign: "left"
+                            text_size: self.size
+
+                    # Technical Separator Line
+                    Widget:
+                        size_hint_y: None
+                        height: "1.5dp"
+                        canvas:
+                            Color:
+                                rgba: [1, 1, 1, 0.05]
+                            Rectangle:
+                                pos: self.pos
+                                size: self.size
+
+                    # Least Sold Section
+                    BoxLayout:
+                        orientation: "vertical"
+                        size_hint_y: None
+                        height: "90dp"
+                        Label:
+                            text: "UNDERPERFORMING UNIT"
+                            color: [1, 0.3, 0.3, 0.8] # Warning Red
+                            font_size: "11sp"
+                            bold: True
+                            halign: "left"
+                            text_size: self.size
+                        Label:
+                            text: root.least_sold_product
+                            font_size: "20sp"
+                            bold: True
+                            color: [1, 1, 1, 0.8]
+                            halign: "left"
+                            text_size: self.size
+                        Label:
+                            text: "Total Volume: " + str(root.min_qty) + " units"
+                            font_size: "13sp"
+                            color: [1, 1, 1, 0.5]
+                            halign: "left"
+                            text_size: self.size
+
+                # Filler
+                Widget:
+                    size_hint_y: None
+                    height: "40dp"
+
+
+#:set deep_midnight [0.08, 0.07, 0.15, 1]
+#:set soft_lavender [0.7, 0.6, 0.9, 1]
+#:set glass_panel [1, 1, 1, 0.05]
+#:set glass_border [1, 1, 1, 0.15]
+#:set white [1, 1, 1, 1]
+
+#<DashboardManager@ScreenManager>:
+#    BuyerDashboard:
+
+#    CartPage:
+#    BuyerDashboard:
+#    StorePage:
+#    PaymentPage
+#    ReviewPage
+#    SellerManagerPage:
+#    DeliveryManagerPage:
+#    AgentOrdersPage:
+#    StorePage:
+
+
+
+# --- REUSABLE PRETTY BUTTON ---
+<NavButton@Button>:
+    background_normal: ""
+    background_color: 0,0,0,0
+    color: white
+    bold: True
+    font_size: '12sp'
+    size_hint: None, None
+    size: dp(70), dp(35)
+    canvas.before:
+        Color:
+            rgba: glass_panel if self.state == 'normal' else [1, 1, 1, 0.15]
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [10,]
+        Color:
+            rgba: glass_border
+        Line:
+            width: 1.1
+            rounded_rectangle: (self.x, self.y, self.width, self.height, 10)
+
+# Coherent System: bg_dark, accent_gold, glass_white, neon_blue
+
+<BusinessCard>:
+    orientation: 'horizontal'
+    size_hint_y: None
+    height: dp(115)
+    padding: dp(15)
+    spacing: dp(15)
+    canvas.before:
+        Color:
+            rgba: glass_white
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [20,]
+        Color:
+            rgba: [1, 1, 1, 0.05]
+        Line:
+            width: 1.1
+            rounded_rectangle: (self.x, self.y, self.width, self.height, 20)
+
+    # Store Avatar with Glow
+    RelativeLayout:
+        size_hint_x: None
+        width: dp(70)
+        canvas.before:
+            Color:
+                rgba: [0, 0.7, 1, 0.1]
+            Ellipse:
+                pos: self.width*0.1, self.height*0.15
+                size: dp(60), dp(60)
+        Image:
+            source: root.biz_logo if hasattr(root, 'biz_logo') else 'logo.png'
+            size_hint: None, None
+            size: dp(50), dp(50)
+            pos_hint: {'center_x': .5, 'center_y': .5}
+
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: dp(2)
+        Label:
+            text: (root.biz_name if hasattr(root, 'biz_name') else "Store Name").upper()
+            bold: True
+            font_size: '16sp'
+            color: [1, 1, 1, 1]
+            text_size: self.size
+            halign: 'left'
+            valign: 'bottom'
+        Label:
+            text: root.biz_type if hasattr(root, 'biz_type') else "Category"
+            font_size: '12sp'
+            color: accent_gold
+            text_size: self.size
+            halign: 'left'
+        Label:
+            text: "RANK (Rating): [color=00ff66]VERIFIED[/color]  ⭐ " + (root.biz_rating if hasattr(root, 'biz_rating') else "5.0")
+            markup: True
+            font_size: '11sp'
+            color: [1, 1, 1, 0.5]
+            text_size: self.size
+            halign: 'left'
+
+    # --- ACTION BUTTON ---
+    Button:
+        text: "Visit"
+        size_hint: None, None
+        size: dp(75), dp(35)
+        pos_hint: {'center_y': .5}
+        background_color: 0,0,0,0
+        color: [0, 0, 0, 1]
+        bold: True
+        font_size: '12sp'
+        on_release: app.root.get_screen('buyerdashboard').visit_seller(root.seller_name, root.biz_location)
+        canvas.before:
+            Color:
+                rgba: neon_blue if self.state == 'normal' else [0, 0.5, 0.8, 1]
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [8,]
+
+<BuyerDashboard>:
+    name: 'buyerdashboard'
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        
+        # --- DECORATIVE TECH MESH (The "Useless Space" Filler) ---
+        Color:
+            rgba: [1, 1, 1, 0.02]
+        Line:
+            points: [0, self.height*0.4, self.width, self.height*0.6]
+        Line:
+            points: [0, self.height*0.6, self.width, self.height*0.4]
+        Ellipse:
+            pos: self.width*0.7, self.height*0.1
+            size: dp(200), dp(200)
+
+    BoxLayout:
+        orientation: 'vertical'
+        
+        # --- PREMIUM TOP NAV ---
+        BoxLayout:
+            size_hint_y: None
+            height: dp(85)
+            padding: [dp(20), dp(15)]
+            spacing: dp(15)
+            
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    text: "GRABNGO"
+                    font_size: '24sp'
+                    bold: True
+                    color: [1, 1, 1, 1]
+                    halign: 'left'
+                    text_size: self.size
+                Label:
+                    text: "ACTIVE TERMINAL: MAIN_NET"
+                    font_size: '9sp'
+                    color: neon_blue
+                    bold: True
+                    halign: 'left'
+                    text_size: self.size
+            
+            # Icon Buttons
+            NavButton:
+                text: "CART"
+                size_hint_x: None
+                width: dp(70)
+                on_press: root.load_cart()
+
+            NavButton:
+                text: "USER"
+                size_hint_x: None
+                width: dp(70)
+                on_press: root.load_user_profile()
+
+        # --- SEARCH INTERFACE ---
+        BoxLayout:
+            size_hint_y: None
+            height: dp(75)
+            padding: [dp(20), dp(5), dp(20), dp(15)]
+            
+            TextInput:
+                id: search_input
+                hint_text: "Search store............"
+                multiline: False
+                padding: [dp(18), dp(14)]
+                background_normal: ''
+                background_color: [1, 1, 1, 0.05]
+                foreground_color: [1, 1, 1, 1]
+                hint_text_color: [1, 1, 1, 0.2]
+                cursor_color: neon_blue
+                font_size: '14sp'
+                canvas.after:
+                    Color:
+                        rgba: neon_blue if self.focus else [1, 1, 1, 0.1]
+                    Line:
+                        width: 1.1
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
+
+        # --- SELLER LIST AREA ---
+        BoxLayout:
+            orientation: 'vertical'
+            padding: [dp(20), 0]
+            Label:
+                text: "PROMINENT MERCHANTS"
+                size_hint_y: None
+                height: dp(25)
+                color: [1, 1, 1, 0.4]
+                font_size: '10sp'
+                bold: True
+                letter_spacing: 2
+                text_size: self.size
+                halign: 'left'
+
+            RecycleView:
+                id: rv
+                viewclass: 'BusinessCard'
+                bar_width: dp(2)
+                bar_color: neon_blue
+                RecycleBoxLayout:
+                    padding: [0, dp(15)]
+                    spacing: dp(15)
+                    default_size: None, dp(115)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    orientation: 'vertical'
+# -------------------------------------------------------------------------
+# STORE PAGE: THE BUYER'S VIEW OF A SPECIFIC SELLER
+# -------------------------------------------------------------------------
+<StorePage>:
+    name: 'storepage'
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        # --- SELLER HEADER ---
+        BoxLayout:
+            size_hint_y: None
+            height: dp(180) 
+            orientation: 'vertical'
+            canvas.before:
+                # Top Glass Header Panel
+                Color:
+                    rgba: glass_white
+                Rectangle: 
+                    pos: self.pos
+                    size: self.size
+                # Neon Blue Divider line at the bottom
+                Color:
+                    rgba: neon_blue
+                Line:
+                    points: [0, self.y, self.width, self.y]
+                    width: 1.2
+
+            # Top Navigation Row
+            BoxLayout:
+                size_hint_y: None
+                height: dp(60)
+                padding: [dp(15), dp(10)]
+                Button:
+                    text: "<"
+                    size_hint: None, None
+                    size: dp(40), dp(40)
+                    background_color: 0,0,0,0
+                    on_release: root.manager.current = 'buyerdashboard'
+                    canvas.before:
+                        Color:
+                            rgba: glass_white
+                        Ellipse:
+                            pos: self.pos
+                            size: self.size
+                
+                Widget: # Spacer
+
+                BoxLayout:
+                    size_hint_x: None
+                    width: self.minimum_width
+                    spacing: dp(10)
+                    Button:
+                        text: "CART"
+                        size_hint: None, None
+                        size: dp(75), dp(35)
+                        pos_hint: {'center_y': .5}
+                        background_color: 0,0,0,0
+                        color: [1,1,1,1]
+                        bold: True
+                        font_size: '11sp'
+                        on_press:root.load_cart()
+                        canvas.before:
+                            Color:
+                                rgba: glass_white
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [8,]
+                    Button:
+                        text: "PROFILE"
+                        size_hint: None, None
+                        size: dp(85), dp(35)
+                        pos_hint: {'center_y': .5}
+                        background_color: 0,0,0,0
+                        color: [1,1,1,1]
+                        bold: True
+                        font_size: '11sp'
+                        on_press:root.load_user_profile()
+                        canvas.before:
+                            Color:
+                                rgba: glass_white
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [8,]
+
+            # --- SELLER IDENTITY (RELATIVE LAYOUT) ---
+            BoxLayout:
+                padding: [dp(25), 0, dp(25), dp(20)]
+                spacing: dp(20)
+                
+                RelativeLayout:
+                    size_hint_x: None
+                    width: dp(70)
+                    # The Profile Image
+                    canvas.after:
+                        Color:
+                            rgba: accent_gold
+                        Line:
+                            width: 1.3
+                            circle: (self.width/2, self.height/2, dp(35))
+
+                    Image:
+                        source: app.seller_pic if app.seller_pic else 'logo.png'
+                        size_hint: None, None
+                        size: dp(65), dp(65)
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+                    
+                    # The Gold Frame (Relative coordinates)
+
+                # Name and Location
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: dp(2)
+                    Label:
+                        text: root.seller_name
+                        bold: True
+                        font_size: '22sp'
+                        color: [1,1,1,1]
+                        text_size: self.size
+                        halign: 'left'
+                        valign: 'bottom'
+                    Label:
+                        text: "📍 " + root.seller_loc
+                        font_size: '13sp'
+                        color: neon_blue
+                        text_size: self.size
+                        halign: 'left'
+                        valign: 'top'
+
+        # --- PRODUCT LIST ---
+        RecycleView:
+            id: product_rv
+            viewclass: 'ProductCard'
+            RecycleBoxLayout:
+                padding: dp(15)
+                spacing: dp(15)
+                default_size: None, dp(140)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+
+# -------------------------------------------------------------------------
+# PRODUCT CARD: REFINED GLASS STYLE
+# -------------------------------------------------------------------------
+<ProductCard>:
+    orientation: 'horizontal'
+    size_hint_y: None
+    height: dp(140)
+    padding: dp(12)
+    spacing: dp(15)
+    canvas.before:
+        # Glass Panel
+        Color:
+            rgba: glass_white
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [15,]
+        # Neon blue border highlight
+        Color:
+            rgba: neon_blue
+        Line:
+            width: 1.1
+            rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
+
+    # PRODUCT IMAGE (Fixed Stencil Layout)
+    AnchorLayout:
+        size_hint_x: None
+        width: dp(100)
+        StencilView:
+            size_hint: None, None
+            size: dp(100), dp(115)
+            Image:
+                source: root.p_img
+                size_hint: None, None
+                size: dp(100), dp(115)
+                pos: self.parent.pos
+                allow_stretch: True
+                keep_ratio: True
+
+    # PRODUCT DETAILS
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: dp(4)
+        
+        Label:
+            text: root.p_name
+            bold: True
+            font_size: '18sp'
+            color: [1,1,1,1]
+            text_size: self.size
+            halign: 'left'
+            valign: 'middle'
+            
+        Label:
+            text: root.p_desc
+            font_size: '12sp'
+            color: [1, 1, 1, 0.5]
+            text_size: self.size
+            halign: 'left'
+            valign: 'top'
+            shorten: True
+            shorten_from: 'right'
+            
+        Label:
+            text: str(root.p_price)
+            bold: True
+            font_size: '19sp'
+            color: accent_gold
+            text_size: self.size
+            halign: 'left'
+        
+        BoxLayout:
+            size_hint_y: None
+            height: dp(35)
+            spacing: dp(10)
+            
+            Button:
+                text: "INFO"
+                background_color: 0,0,0,0
+                color: [1,1,1,1]
+                bold: True
+                font_size: '11sp'
+                on_release: root.parent.parent.parent.parent.get_product_info(root.p_name)
+                canvas.before:
+                    Color: 
+                        rgba: [1, 1, 1, 0.1]
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [8,]
+            
+            Button:
+                text: "BUY"
+                background_color: 0,0,0,0
+                color: [1,1,1,1]
+                bold: True
+                font_size: '11sp'
+                on_press: root.parent.parent.parent.parent.buy_product(root.p_name, root.seller_name, root.qty)
+
+                canvas.before:
+                    Color:
+                        rgba: neon_blue 
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [8,]
+<CartItem@BoxLayout>:
+#    product_name: ""
+#    product_price: 0
+#    product_qty: 0
+    orientation: 'horizontal'
+    size_hint_y: None
+    height: dp(90)
+    padding: dp(12)
+    spacing: dp(15)
+    canvas.before:
+        Color:
+            rgba: glass_white
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [15,]
+        Color:
+            rgba: [1, 1, 1, 0.03]
+        Line:
+            width: 1
+            rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
+
+    BoxLayout:
+        orientation: 'vertical'
+        pos_hint: {'center_y': .5}
+        Label:
+            text: (root.product_name).upper()
+            bold: True
+            font_size: '15sp'
+            color: [1, 1, 1, 1]
+            halign: 'left'
+            text_size: self.size
+        Label:
+            text: "UNIT VAL: $" + str(root.product_price)
+            font_size: '11sp'
+            color: accent_gold
+            halign: 'left'
+            text_size: self.size
+
+    # QUANTITY CONSOLE
+    BoxLayout:
+        size_hint_x: None
+        width: dp(100)
+        spacing: dp(8)
+        canvas.before:
+            Color:
+                rgba: [1, 1, 1, 0.05]
+            RoundedRectangle:
+                pos: self.x, self.y + dp(15)
+                size: self.width, dp(35)
+                radius: [8,]
+        
+        Button:
+            text: "-"
+            size_hint: None, None
+            size: dp(30), dp(30)
+            pos_hint: {'center_y': .5}
+            background_color: 0,0,0,0
+            on_release: Factory.QuantityPopup(p_name=root.product_name,order_id=root.order_id).open()
+            canvas.before:
+                Color:
+                    rgba: [1, 1, 1, 0.1]
+                Ellipse:
+                    pos: self.pos
+                    size: self.size
+        Label:
+            text: str(root.product_qty)
+            bold: True
+            font_size: '16sp'
+            color: neon_blue
+        Button:
+            text: "+"
+            size_hint: None, None
+            size: dp(30), dp(30)
+            pos_hint: {'center_y': .5}
+            background_color: 0,0,0,0
+            on_release:
+                Factory.QuantityPopup(p_name=root.product_name,order_id=root.order_id).open()
+            canvas.before:
+                Color:
+                    rgba: [1, 1, 1, 0.1]
+                Ellipse:
+                    pos: self.pos
+                    size: self.size
+
+    # DELETE ACTION
+    Button:
+        text: "X"
+        size_hint: None, None
+        size: dp(40), dp(40)
+        pos_hint: {'center_y': .5}
+        color: [1, 0.3, 0.3, 0.8]
+        background_color: 0,0,0,0
+        bold: True
+        on_release: app.root.get_screen('cartpage').delete_item(root.order_id)
+
+
+
+
+
+<CartPage>:
+    name: 'cartpage'
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        
+        # --- BACKGROUND TECH DECOR (Vertical Data Stripes) ---
+        Color:
+            rgba: [1, 1, 1, 0.01]
+        Rectangle:
+            pos: self.width * 0.2, 0
+            size: dp(1), self.height
+        Rectangle:
+            pos: self.width * 0.8, 0
+            size: dp(1), self.height
+
+    BoxLayout:
+        orientation: 'vertical'
+        
+        # NAVIGATION HEADER
+        FloatLayout:
+            size_hint_y: None
+            height: dp(70)
+            SecondaryButton:
+                text: "EXIT"
+                size_hint: None, None
+                size: dp(65), dp(35)
+                pos_hint: {'center_y': 0.5, 'x': 0.05}
+                on_press: app.root.current = "buyerdashboard"
+            Label:
+                text: "Cart Transactions"
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                font_size: '12sp'
+                bold: True
+                color: accent_gold
+                letter_spacing: 3
+
+        RecycleView:
+            id: cart_rv
+            viewclass: 'CartItem'
+            bar_width: dp(2)
+            bar_color: neon_blue
+            RecycleBoxLayout:
+                padding: dp(20)
+                spacing: dp(15)
+                default_size: None, dp(90)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+
+        # --- FOOTER SUMMARY PANEL ---
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: dp(220)
+            padding: dp(20)
+            spacing: dp(15)
+            canvas.before:
+                Color:
+                    rgba: glass_white
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [30, 30, 0, 0]
+                Color:
+                    rgba: neon_blue
+                Line:
+                    points: [self.x + dp(40), self.top, self.right - dp(40), self.top]
+                    width: 1.5
+
+            BoxLayout:
+                size_hint_y: None
+                height: dp(40)
+                Label:
+                    text: "TOTAL PAYABLE"
+                    font_size: '11sp'
+                    bold: True
+                    color: [1, 1, 1, 0.5]
+                    halign: 'left'
+                    text_size: self.size
+                Label:
+                    text: "$" + str(round(root.total_sum, 2))
+                    bold: True
+                    font_size: '28sp'
+                    color: [1, 1, 1, 1]
+                    halign: 'right'
+                    text_size: self.size
+
+            PrimaryButton:
+                text: "REFRESH CALCULATION"
+                height: dp(45)
+                on_release: root.compute_sum_action()
+
+            BoxLayout:
+                spacing: dp(12)
+                SecondaryButton:
+                    text: "CLEAR ALL"
+                    on_release: root.clear_cart()
+                PrimaryButton:
+                    text: "PAYMENT GATEWAY"
+                    on_release: root.manager.current = 'paymentpage'
+
+
+
+<QuantityPopup@ModalView>:
+    size_hint: (0.8, 0.4)
+    background_color: 0,0,0,0  # Make default background invisible
+    p_name: ""                 # Property to hold the product name
+    order_id: 0
+
+
+    canvas.before:
+        # The Glass Background
+        Color:
+            rgba: bg_dark
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [20,]
+        # The Neon Glow Border
+        Color:
+            rgba: neon_blue
+        Line:
+            width: 1.5
+            rounded_rectangle: (self.x, self.y, self.width, self.height, 20)
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+
+        Label:
+            text: "Update Quantity for"
+            font_size: '14sp'
+            color: [1,1,1,0.6]
+        
+        Label:
+            text: root.p_name
+            bold: True
+            font_size: '18sp'
+            color: accent_gold
+            text_size: self.size
+            halign: 'center'
+
+        TextInput:
+            id: qty_input
+            text: "1"
+            multiline: False
+            input_type: 'number'
+            input_filter: 'int'
+            size_hint_y: None
+            height: dp(50)
+            font_size: '22sp'
+            halign: 'center'
+            background_color: [1, 1, 1, 0.05]
+            foreground_color: [1, 1, 1, 1]
+            cursor_color: accent_gold
+            # Logic to auto-focus keyboard on mobile
+            focus: True
+
+        Button:
+            text: "CONFIRM"
+            size_hint_y: None
+            height: dp(45)
+            background_color: 0,0,0,0
+            bold: True
+            # When pressed, we call the Screen's update function
+            on_release:
+                cart_screen = app.root.get_screen('cartpage')
+#                rv = cart_screen.ids.cart_rv
+#                order_id = rv.data[root.index]['order_id']
+                app.root.get_screen('cartpage').update_qty(root.order_id,qty_input.text)
+                root.dismiss()
+            canvas.before:
+                Color:
+                    rgba: neon_blue
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [10,]
+
+<BuyerLocationPopup@ModalView>:
+    size_hint: (0.8, 0.4)
+    background_color: 0,0,0,0  # Make default background invisible
+    location: ""                 # Property to hold the product name
+
+
+    canvas.before:
+        # The Glass Background
+        Color:
+            rgba: bg_dark
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [20,]
+        # The Neon Glow Border
+        Color:
+            rgba: neon_blue
+        Line:
+            width: 1.5
+            rounded_rectangle: (self.x, self.y, self.width, self.height, 20)
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+
+        Label:
+            text: "Update Location"
+            font_size: '14sp'
+            color: [1,1,1,0.6]
+        
+        Label:
+            text: root.location
+            bold: True
+            font_size: '18sp'
+            color: accent_gold
+            text_size: self.size
+            halign: 'center'
+
+        TextInput:
+            id: buyer_new_location_input
+            text: app.buyer_location
+            multiline: False
+            input_type: 'text'
+            size_hint_y: None
+            height: dp(50)
+            font_size: '22sp'
+            halign: 'center'
+            background_color: [1, 1, 1, 0.05]
+            foreground_color: [1, 1, 1, 1]
+            cursor_color: accent_gold
+            # Logic to auto-focus keyboard on mobile
+            focus: True
+
+        Button:
+            text: "CONFIRM"
+            size_hint_y: None
+            height: dp(45)
+            background_color: 0,0,0,0
+            bold: True
+            # When pressed, we call the Screen's update function
+            on_release:
+
+                app.root.get_screen('buyer_profile_page').update_location((buyer_new_location_input.text).strip())
+                
+                root.dismiss()
+            canvas.before:
+
+                Color:
+                    rgba: neon_blue
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [10,]
+
+
+# Coherent System: bg_dark, accent_gold, glass_white, neon_blue
+
+<Review_Page>:
+    name: 'review_page'
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        Color:
+            rgba: [0.85, 0.75, 0.45, 0.05]
+        Ellipse:
+            pos: self.width * 0.1, self.height * 0.6
+            size: self.width * 0.8, self.width * 0.8
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: [dp(20), dp(10), dp(20), dp(10)]
+
+        # Header Fixed at Top
+        FloatLayout:
+            size_hint_y: None
+            height: dp(60)
+            SecondaryButton:
+                text: "ESC"
+                size_hint: None, None
+                size: "65dp", "35dp"
+                pos_hint: {'center_y': 0.5, 'x': 0}
+                on_press: app.root.current = "buyerdashboard"
+            Label:
+                text: "FEEDBACK TERMINAL"
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                font_size: '11sp'
+                bold: True
+                color: accent_gold
+                letter_spacing: 3
+
+        ScrollView:
+            do_scroll_x: False
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                padding: [0, dp(10), 0, dp(20)]
+                spacing: dp(25)
+
+                Label:
+                    text: "Experience Report"
+                    font_size: '24sp'
+                    bold: True
+                    size_hint_y: None
+                    height: dp(30)
+
+                # --- LOGISTICS DATA PANEL ---
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: dp(120)
+                    padding: dp(15)
+                    spacing: dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: [1, 1, 1, 0.03]
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [15,]
+
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(20)
+                        Label:
+                            text: "LOGISTICS TELEMETRY"
+                            font_size: '10sp'
+                            color: accent_gold
+                            halign: 'left'
+                            text_size: self.size
+                        Label:
+                            text: "STATUS: IN TRANSIT"
+                            font_size: '10sp'
+                            color: [0, 1, 0.5, 0.8]
+                            halign: 'right'
+                            text_size: self.size
+
+                    GridLayout:
+                        cols: 2
+                        Label:
+                            text: "FROM: " + (app.seller_location if hasattr(app, 'seller_location') else "STATION_ALPHA")
+                            font_size: '13sp' 
+                            color: [1, 1, 1, 0.8]
+                            halign: 'left'
+                            text_size: self.size
+                        Label:
+                            text: "EST. ARRIVAL"
+                            font_size: '11sp'
+                            color: neon_blue
+                            halign: 'right'
+                            text_size: self.size
+                        Label:
+                            text: "TO: " + (app.buyer_location if hasattr(app, 'buyer_location') else "STATION_OMEGA")
+                            font_size: '13sp'
+                            color: [1, 1, 1, 0.8]
+                            halign: 'left'
+                            text_size: self.size
+                        Label:
+                            text: "24 MINS" 
+                            font_size: '22sp'
+                            bold: True
+                            color: [1, 1, 1, 1]
+                            halign: 'right'
+                            text_size: self.size
+
+                # Star Rating Interface
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: dp(150)
+                    spacing: dp(10)
+                    padding: dp(15)
+                    canvas.before:
+                        Color:
+                            rgba: glass_white
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [20,]
+                    
+                    BoxLayout:
+                        spacing: dp(5)
+                        Button:
+                            text: "★"
+                            font_size: '32sp'
+                            background_color: 0,0,0,0
+                            color: accent_gold
+                        Button:
+                            text: "☆"
+                            font_size: '32sp'
+                            background_color: 0,0,0,0
+                            color: [1, 1, 1, 0.2]
+                        Button:
+                            text: "★"
+                            font_size: '32sp'
+                            background_color: 0,0,0,0
+                            color: accent_gold
+                        Button:
+                            text: "★"
+                            font_size: '32sp'
+                            background_color: 0,0,0,0
+                            color: accent_gold
+                        Button:
+                            text: "★"
+                            font_size: '32sp'
+                            background_color: 0,0,0,0
+                            color: accent_gold
+
+                    TextInput:
+                        id: rat
+                        hint_text: "Rating 1-5"
+                        size_hint: None, None
+                        width: dp(120)
+                        height: dp(45)
+                        pos_hint: {'center_x': .5}
+                        multiline: False
+                        font_size: '18sp'
+                        halign: 'center'
+                        background_color: 0,0,0,0
+                        foreground_color: neon_blue
+                        canvas.after:
+                            Color:
+                                rgba: neon_blue
+                            Line:
+                                width: 1.2
+                                points: [self.x, self.y, self.right, self.y]
+
+                # --- ADDED: Response label for wrong rating ---
+                Label:
+                    id: rating_feedback
+                    text: root.response_to_wrong_rating
+                    size_hint_y: None
+                    height: dp(20)
+                    font_size: '11sp'
+                    color: [1, 0, 0, 1]  # Red for warning
+                    bold: True
+
+                # Feedback Area (Expanded)
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: dp(180)
+                    spacing: dp(10)
+                    Label:
+                        text: "COMMENTS (OPTIONAL)"
+                        font_size: '10sp'
+                        bold: True
+                        color: [1, 1, 1, 0.4]
+                        size_hint_y: None
+                        height: dp(20)
+                    
+                    TextInput:
+                        id: review_input
+                        hint_text: "Transmit your feedback..."
+                        background_color: [1, 1, 1, 0.04]
+                        foreground_color: [1, 1, 1, 1]
+                        padding: dp(15)
+                        font_size: '14sp'
+
+                # Commitment Statement
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(70)
+                    padding: dp(10)
+                    canvas.before:
+                        Color:
+                            rgba: [0, 1, 0.5, 0.05]
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [12,]
+                    Label:
+                        text: "VERIFICATION: I confirm this review is an authentic representation of my experience."
+                        font_size: '10sp'
+                        italic: True
+                        halign: 'center'
+                        text_size: self.size
+
+                # Final Delivery Time Label
+                Label:
+                    text: "Delivery Time:      " + str(app.approximate_time)
+                    size_hint_y: None
+                    height: dp(20)
+                    font_size: '12sp'
+                    color: accent_gold
+
+                PrimaryButton:
+                    text: "TRANSMIT REVIEW"
+                    size_hint_y: None
+                    height: dp(55)
+                    on_release: root.submit_review(rat.text)
+
+<PaymentPage>:
+    name: 'payment_page'
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        
+        # --- DECORATIVE SECURITY SHIELD (Filler) ---
+        Color:
+            rgba: [0, 1, 0.4, 0.03] # Subtle Green Security Glow
+        Ellipse:
+            pos: self.width * 0.25, self.height * 0.4
+            size: self.width * 0.5, self.width * 0.5
+
+    ScrollView:
+        do_scroll_x: False
+        BoxLayout:
+            orientation: 'vertical'
+            padding: [dp(20), dp(10), dp(20), dp(40)]
+            spacing: dp(25)
+            size_hint_y: None
+            height: self.minimum_height
+
+            # Header & Back Navigation
+            FloatLayout:
+                size_hint_y: None
+                height: dp(60)
+                SecondaryButton:
+                    text: "CANCEL"
+                    size_hint: None, None
+                    size: dp(75), dp(35)
+                    pos_hint: {'center_y': 0.5, 'x': 0}
+                    on_release: app.root.current = "cartpage"
+                Label:
+                    text: "CHECKOUT GATEWAY"
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    font_size: '12sp'
+                    bold: True
+                    color: accent_gold
+                    letter_spacing: 3
+
+            # --- SECTION 1: LOGISTICS ---
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: dp(160)
+                spacing: dp(6)
+                padding: dp(20)
+                canvas.before:
+                    Color:
+                        rgba: glass_white
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [20,]
+                
+                Label:
+                    text: "DELIVERY ENDPOINT"
+                    bold: True
+                    color: neon_blue
+                    font_size: '11sp'
+                    halign: 'left'
+                    text_size: self.size
+                
+                CustomInput:
+                    id: delivery_address
+                    hint_text: "Target Address (Street, City)"
+                    height: dp(45)
+                
+                CustomInput:
+                    id: phone_number
+                    hint_text: "Encrypted Contact Number"
+                    height: dp(45)
+
+            # --- SECTION 2: CARD PROTOCOL ---
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: dp(180)
+                spacing: dp(12)
+                padding: dp(20)
+                canvas.before:
+                    Color:
+                        rgba: glass_white
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [20,]
+
+                Label:
+                    text: "PAYMENT INSTRUMENT"
+                    bold: True
+                    color: neon_blue
+                    font_size: '11sp'
+                    halign: 'left'
+                    text_size: self.size
+
+                CustomInput:
+                    id: card_number
+                    hint_text: "Card Number (16-Digit Stream)"
+                    height: dp(45)
+
+                BoxLayout:
+                    spacing: dp(15)
+                    CustomInput:
+                        id: expiry_date
+                        hint_text: "MM/YY"
+                    CustomInput:
+                        id: cvv
+                        hint_text: "CVV"
+                        password: True
+
+            # --- ORDER SUMMARY (Glass Banner) ---
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: dp(70)
+                padding: [dp(20), dp(10)]
+                canvas.before:
+                    Color:
+                        rgba: [1, 1, 1, 0.03]
+                    Line:
+                        width: 1.1
+                        dash_length: 5
+                        dash_offset: 2
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 10)
+                
+                Label:
+                    text: "AUTHORIZED DEBIT"
+                    font_size: '10sp'
+                    color: [1, 1, 1, 0.5]
+                Label:
+                    text: "XAF" + str(round(root.total_sum, 2))
+                    font_size: '26sp'
+                    bold: True
+                    color: [1, 1, 1, 1]
+
+            # --- ACTION BUTTON ---
+            PrimaryButton:
+                text: "EXECUTE SECURE PAYMENT"
+                size_hint_y: None
+                height: dp(60)
+                on_release: root.process_payment()
+            
+            Label:
+                text: "🔒 AES-256 END-TO-END ENCRYPTED"
+                font_size: '9sp'
+                color: [1, 1, 1, 0.3]
+                halign: 'center'
+
+
+# Coherent System: bg_dark, accent_gold, glass_white, neon_blue
+# Coherent System: bg_dark, accent_gold, glass_white, neon_blue
+
+<SellerProductCard>:
+    orientation: 'horizontal'
+    size_hint_y: None
+    height: dp(140)
+    padding: dp(12)
+    spacing: dp(15)
+    canvas.before:
+        Color:
+            rgba: glass_white
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [15,]
+        Color:
+            rgba: [1, 1, 1, 0.05]
+        Line:
+            width: 1
+            rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
+
+    # Product Preview
+    RelativeLayout:
+        size_hint_x: None
+        width: dp(100)
+        canvas.after:
+            Color:
+                rgba: [1, 1, 1, 0.1]
+            Line:
+                width: 1
+                rectangle: (self.x, self.y, self.width, self.height)
+
+        Image:
+            source: root.p_img if root.p_img else 'placeholder.png'
+            allow_stretch: True
+            keep_ratio: True
+
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: dp(4)
+        Label:
+            text: root.p_name.upper()
+            bold: True
+            font_size: '16sp'
+            color: [1, 1, 1, 1]
+            text_size: self.size
+            halign: 'left'
+        Label:
+            text: root.p_desc
+            font_size: '11sp'
+            color: [1, 1, 1, 0.4]
+            text_size: self.size
+            halign: 'left'
+            valign: 'top'
+            shorten: True
+            shorten_from: 'right'
+        Label:
+            text: "PRICE: " + root.p_price
+            bold: True
+            font_size: '16sp'
+            color: accent_gold
+            text_size: self.size
+            halign: 'left'
+        
+        # ADMIN ACTIONS
+        BoxLayout:
+            size_hint_y: None
+            height: dp(35)
+            spacing: dp(8)
+            Button:
+                text: "EDIT"
+                font_size: '10sp'
+                bold: True
+                background_color: 0,0,0,0
+                color: neon_blue
+                on_release:root.open_edit_popup()
+                canvas.before:
+                    Color:
+                        rgba: [0, 0.7, 1, 0.1]
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5,]
+            Button:
+                text: "REMOVE"
+                font_size: '10sp'
+                bold: True
+                background_color: 0,0,0,0
+                color: [1, 0.3, 0.3, 1]
+                on_release:app.root.get_screen('seller_manager_page').delete_product(root.p_name)
+                canvas.before:
+                    Color:
+                        rgba: [1, 0, 0, 0.1]
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5,]
+
+<Seller_Manager_Page>:
+    name: 'seller-dash'
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        # --- MERCHANT COMMAND HEADER ---
+        BoxLayout:
+            size_hint_y: None
+            height: dp(180)
+            orientation: 'vertical'
+            canvas.before:
+                Color:
+                    rgba: [1, 1, 1, 0.02]
+                Rectangle: 
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: accent_gold
+                Line:
+                    points: [0, self.y, self.width, self.y]
+                    width: 1.2
+
+            # Top Action Bar
+            BoxLayout:
+                size_hint_y: None
+                height: dp(65)
+                padding: [dp(20), dp(10)]
+                spacing: dp(10)
+                Button:
+                    text: "<<"
+                    size_hint: None, None
+                    size: dp(40), dp(40)
+                    pos_hint: {'center_y': .5}
+                    background_color: 0,0,0,0
+                    disabled: app.is_active
+                    on_release: app.root.current = "buyerdashboard" # Or login
+                    canvas.before:
+                        Color:
+                            rgba: glass_white
+                        Ellipse:
+                            pos: self.pos
+                            size: self.size
+
+                Widget: # Spacer
+
+                NavButton:
+                    text: "ANALYTICS"
+                    size_hint: None, None
+                    size: dp(100), dp(35)
+                    pos_hint: {'center_y': .5}
+                    on_press: app.root.current = "get_store_annalytic_page"
+
+
+                NavButton:
+                    text: "Orders"
+                    size_hint: None, None
+                    size: dp(100), dp(35)
+                    pos_hint: {'center_y': .5}
+                    on_press: app.root.current = "sellerorderspage"
+
+                NavButton:
+                    text: "PROFILE"
+                    size_hint: None, None
+                    size: dp(85), dp(35)
+                    pos_hint: {'center_y': .5}
+                    on_press: app.root.current = "seller_profile_page"
+
+            # Seller Branding Area
+            BoxLayout:
+                padding: [dp(25), dp(10), dp(25), dp(20)]
+                spacing: dp(15)
+                Image:
+                    source: "logo.png"
+                    size_hint_x: None
+                    width: dp(55)
+                BoxLayout:
+                    orientation: 'vertical'
+                    Label:
+                        text: "MERCHANT PANEL"
+                        font_size: '10sp'
+                        color: accent_gold
+                        bold: True
+                        letter_spacing: 2
+                        text_size: self.size
+                        halign: 'left'
+                    Label:
+                        text: app.seller_name.upper()
+                        bold: True
+                        font_size: '22sp'
+                        color: white
+                        text_size: self.size
+                        halign: 'left'
+
+        # --- INVENTORY CONTROL BAR ---
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            padding: [dp(20), dp(10)]
+            Label:
+                text: "STORE INVENTORY"
+                font_size: '12sp'
+                bold: True
+                color: [1, 1, 1, 0.4]
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+            
+            Button:
+                text: "+ NEW PRODUCT"
+                size_hint: None, None
+                size: dp(140), dp(40)
+                pos_hint: {'center_y': .5}
+                background_color: 0,0,0,0
+                color: bg_dark
+                bold: True
+                font_size: '11sp'
+                on_release:Factory.AddProductPopup().open()
+                canvas.before:
+                    Color:
+                        rgba: accent_gold
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [20,]
+
+        # --- PRODUCT LIST ---
+        RecycleView:
+            id: seller_product_rv
+            viewclass: 'SellerProductCard'
+            RecycleBoxLayout:
+                padding: [dp(20), 0, dp(20), dp(20)]
+                spacing: dp(15)
+                default_size: None, dp(140)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+
+# 1. THE AGENT CARD COMPONENT
+# Coherent System: bg_dark, accent_gold, glass_white, neon_blue
+<AgentCard>:
+    orientation: 'horizontal'
+    size_hint_y: None
+    height: dp(90)
+    padding: [dp(15), dp(10)]
+    spacing: dp(15)
+    canvas.before:
+        Color:
+            rgba: glass_white
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [20,]
+
+    # --- PROFILE ICON ---
+    RelativeLayout:
+        size_hint: None, None
+        size: dp(60), dp(60)
+        pos_hint: {'center_y': .5}
+        canvas.before:
+            Color:
+                rgba: [1, 1, 1, 0.05]
+            Ellipse:
+                pos: self.pos
+                size: self.size
+
+        canvas.after:
+            Color:
+                rgba: [0, 1, 0.5, 1] 
+            Ellipse:
+                pos: self.x + dp(45), self.y + dp(5)
+                size: dp(12), dp(12)
+
+        Label:
+            text: "👤"
+            font_size: '24sp'
+            pos_hint: {'center_x': .5, 'center_y': .5}
+
+    # --- AGENT INFO ---
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_y: None
+        height: dp(55) # Slightly increased to accommodate ID
+        pos_hint: {'center_y': .5}
+        spacing: dp(1)
+        
+        # --- Name and ID Row ---
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: dp(8)
+            Label:
+                text: root.a_name
+                bold: True
+                font_size: '16sp'
+                color: [1, 1, 1, 1]
+                halign: 'left'
+                valign: 'middle'
+                text_size: self.size
+            Label:
+                text: "ID: " + str(root.a_id)
+                font_size: '15sp'
+                color: neon_blue # Distinct color for the ID
+                bold: True
+                halign: 'right'
+                valign: 'middle'
+                text_size: self.size
+                size_hint_x: None
+                width: dp(60)
+            
+        # --- Location Row ---
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: dp(4)
+            size_hint_y: None
+            height: dp(20)
+            Label:
+                text: "LOCATION:"
+                font_size: '10sp'
+                bold: True
+                color: accent_gold
+                size_hint_x: None
+                width: dp(65) 
+                halign: 'left'
+                text_size: self.size
+            Label:
+                text: root.a_loc
+                font_size: '12sp'
+                color: [1, 1, 1, 0.6]
+                halign: 'left'
+                valign: 'middle'
+                text_size: self.size
+
+    # --- ACTION ---
+    BoxLayout:
+        size_hint_x: None
+        width: dp(90)
+        padding: [0, dp(15)]
+        Button:
+            text: "OFFBOARD"
+            background_color: 0, 0, 0, 0
+            color: [1, 0.3, 0.3, 1]
+            bold: True
+            font_size: '10sp'
+            on_release: app.root.get_screen('deliver_manager_page').delete_agent(root.a_id, root.a_name)
+            canvas.before:
+                Color:
+                    rgba: [1, 0.3, 0.3, 0.1]
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [8,]
+                Color:
+                    rgba: [1, 0.3, 0.3, 0.3]
+                Line:
+                    width: 1
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 8)
+
+<Delivery_Manager_Page>:
+    name: 'delivery-dash'
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(20)
+
+        # --- HEADER ---
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            spacing: dp(15)
+            Button:
+                text: "<"
+                size_hint: None, None
+                size: dp(40), dp(40)
+                pos_hint: {'center_y': .5}
+                background_color: 0,0,0,0
+                on_release: root.manager.current = 'seller_manager_page'
+                canvas.before:
+                    Color:
+                        rgba: glass_white
+                    Ellipse:
+                        pos: self.pos
+                        size: self.size
+            
+            Label:
+                text: "LOGISTICS PERSONNEL"
+                bold: True
+                font_size: '14sp'
+                color: accent_gold
+                letter_spacing: 2
+                halign: 'left'
+                text_size: self.size
+
+        # --- REGISTRATION MODULE ---
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: dp(160)
+            padding: dp(20)
+            spacing: dp(12)
+            canvas.before:
+                Color:
+                    rgba: glass_white
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [20,]
+                Color:
+                    rgba: [1, 1, 1, 0.05]
+                Line:
+                    width: 1
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 20)
+
+            Label:
+                text: "ADD NEW AGENT"
+                font_size: '10sp'
+                bold: True
+                color: [1, 1, 1, 0.4]
+                halign: 'left'
+                text_size: self.size
+
+            BoxLayout:
+                spacing: dp(10)
+                size_hint_y: None
+                height: dp(40)
+                CustomInput:
+                    id: new_agent_name
+                    hint_text: "Identity Name"
+                CustomInput:
+                    id: new_agent_loc
+                    hint_text: "Assigned Sector"
+
+            PrimaryButton:
+                text: "AUTHORIZE & REGISTER"
+                size_hint_y: None
+                height: dp(45)
+                on_release: root.add_agent(new_agent_name.text,new_agent_loc.text)
+
+        # --- ACTIVE FLEET ---
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: dp(10)
+            Label:
+                text: "ACTIVE Agents"
+                size_hint_y: None
+                height: dp(20)
+                font_size: '11sp'
+                bold: True
+                color: neon_blue
+                halign: 'left'
+                text_size: self.size
+
+            RecycleView:
+                id: agent_rv
+                viewclass: 'AgentCard'
+                RecycleBoxLayout:
+                    padding: [0, dp(5)]
+                    spacing: dp(12)
+                    default_size: None, dp(90)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    orientation: 'vertical'
+
+# Coherent System: bg_dark, accent_gold, glass_white, neon_blue
+
+<AgentOrderCard>:
+    orientation: 'vertical'
+    size_hint_y: None
+    height: dp(190)
+    padding: dp(15)
+    spacing: dp(10)
+    canvas.before:
+        Color:
+            rgba: glass_white
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [20,]
+        Color:
+            rgba: [1, 1, 1, 0.05]
+        Line:
+            width: 1.1
+            rounded_rectangle: (self.x, self.y, self.width, self.height, 20)
+
+    # --- Header: Task Identity ---
+    BoxLayout:
+        size_hint_y: None
+        height: dp(35)
+        Label:
+            text: root.p_name.upper() + " [b]x" + root.p_qty + "[/b]"
+            markup: True
+            font_size: '18sp'
+            color: [1, 1, 1, 1]
+            halign: 'left'
+            text_size: self.size
+        Label:
+            text: "CLIENT: " + root.b_name
+            font_size: '11sp'
+            bold: True
+            color: accent_gold
+            halign: 'right'
+            text_size: self.size
+
+    # --- Route Visualizer (Logistics Path) ---
+    BoxLayout:
+        orientation: 'horizontal'
+        spacing: dp(15)
+        
+        # Timeline Track
+        Widget:
+            size_hint_x: None
+            width: dp(20)
+            canvas:
+                # Vertical Path
+                Color:
+                    rgba: [1, 1, 1, 0.1]
+                Line:
+                    points: [self.center_x, self.y + dp(15), self.center_x, self.top - dp(15)]
+                    width: 1.5
+                # Pickup Node
+                Color:
+                    rgba: [0, 1, 0.5, 1] # Green Node
+                Ellipse:
+                    pos: self.center_x - dp(5), self.top - dp(15)
+                    size: dp(10), dp(10)
+                # Dropoff Node
+                Color:
+                    rgba: neon_blue # Blue Node
+                Ellipse:
+                    pos: self.center_x - dp(5), self.y + dp(10)
+                    size: dp(10), dp(10)
+
+        # Path Details
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: dp(5)
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    text: "FROM (PICKUP)"
+                    font_size: '9sp'
+                    color: [1, 1, 1, 0.4]
+                    text_size: self.size
+                Label:
+                    text: root.s_loc
+                    font_size: '13sp'
+                    bold: True
+                    color: [0.8, 1, 0.8, 1]
+                    text_size: self.size
+            
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    text: "TO (DELIVER)"
+                    font_size: '9sp'
+                    color: [1, 1, 1, 0.4]
+                    text_size: self.size
+                Label:
+                    text: root.b_loc
+                    font_size: '13sp'
+                    bold: True
+                    color: [0.8, 0.8, 1, 1]
+                    text_size: self.size
+
+    # --- Execute Action ---
+    Button:
+        text: "COMPLETE MISSION"
+        size_hint_y: None
+        height: dp(45)
+        background_color: 0,0,0,0
+        on_release: app.root.get_screen('agent-orders').complete_delivery(root.p_name)
+        canvas.before:
+            Color:
+                rgba: accent_gold if self.state == 'normal' else [0.8, 0.7, 0, 1]
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [12,]
+        color: bg_dark
+        bold: True
+        letter_spacing: 1
+
+<Agent_Order_Page>:
+    name: 'agent-orders'
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: [dp(20), dp(25), dp(20), dp(10)]
+        spacing: dp(20)
+
+        # Header with Task Counter
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            Label:
+                text: "ASSIGNED TASKS"
+                font_size: '20sp'
+                bold: True
+                color: [1, 1, 1, 1]
+                halign: 'left'
+                text_size: self.size
+            Label:
+                text: "LIVE"
+                size_hint_x: None
+                width: dp(50)
+                font_size: '10sp'
+                bold: True
+                color: [0, 1, 0.5, 1]
+                canvas.before:
+                    Color:
+                        rgba: [0, 1, 0.5, 0.1]
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5,]
+
+        # Operational List
+        RecycleView:
+            id: agent_order_rv
+            viewclass: 'AgentOrderCard'
+            RecycleBoxLayout:
+                padding: [0, dp(5), 0, dp(20)]
+                spacing: dp(18)
+                default_size: None, dp(190)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+<HistoryItem>:
+    orientation: 'vertical'
+    size_hint_y: None
+    height: dp(140)  # Increased height for better font breathing room
+    padding: [dp(15), dp(12)]
+    canvas.before:
+        # Background: Deep "Glass" finish
+        Color:
+            rgba: [1, 1, 1, 0.05]
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [12,]
+        # Border: Subtle outline for definition
+        Color:
+            rgba: [1, 1, 1, 0.1]
+        Line:
+            width: 1
+            rounded_rectangle: (self.x, self.y, self.width, self.height, 12)
+
+    # TOP ROW: Product Name and Total Price
+    BoxLayout:
+        size_hint_y: None
+        height: dp(35)
+        Label:
+            text: root.product_name.upper()
+            font_size: '18sp'  # Larger font for readability
+            bold: True
+            color: [1, 1, 1, 1] # Bright White
+            halign: 'left'
+            text_size: self.size
+        Label:
+            text: "$" + root.total_row
+            font_size: '20sp'
+            bold: True
+            color: neon_blue # Distinct color for the money
+            halign: 'right'
+            text_size: self.size
+
+    # MIDDLE ROW: Separator Line (Terminal Style)
+    Widget:
+        size_hint_y: None
+        height: dp(10)
+        canvas:
+            Color:
+                rgba: [1, 1, 1, 0.1]
+            Line:
+                points: [self.x, self.center_y, self.right, self.center_y]
+                width: 0.5
+
+    # BOTTOM CONTENT: Telemetry & Details
+    GridLayout:
+        cols: 2
+        spacing: dp(5)
+        
+        # Seller Info
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text: "VENDOR / SOURCE"
+                font_size: '10sp'
+                color: [1, 1, 1, 0.4]
+                halign: 'left'
+                text_size: self.size
+            Label:
+                text: root.seller_name
+                font_size: '14sp' # Increased for readability
+                color: accent_gold
+                bold: True
+                halign: 'left'
+                text_size: self.size
+
+        # Order Logistics
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text: "Transaction Date"
+                font_size: '10sp'
+                color: [1, 1, 1, 0.4]
+                halign: 'right'
+                text_size: self.size
+            Label:
+                text: root.date
+                font_size: '13sp'
+                color: [1, 1, 1, 0.8]
+                halign: 'right'
+                text_size: self.size
+
+    # UNIT DATA FOOTER
+    Label:
+        text: "UNIT VAL: CFA" + root.price + "  [color=33ccff]|[/color]  QUANTITY: " + root.qty
+        markup: True
+        font_size: '11sp'
+        color: [1, 1, 1, 0.5]
+        halign: 'left'
+        size_hint_y: None
+        height: dp(20)
+        text_size: self.size
+
+<BuyerHistoryPage>:
+    name: 'buyerhistorypage'
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: [dp(20), dp(15)]
+        spacing: dp(10)
+
+        # Header Section
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            SecondaryButton:
+                text: "BACK"
+                size_hint: None, None
+                size: dp(70), dp(35)
+                on_press: app.root.current = "buyer_profile_page"
+            Label:
+                text: "History"
+                font_size: '14sp'
+                bold: True
+                color: accent_gold
+                letter_spacing: 4
+
+        # The Scrollable List
+        RecycleView:
+            id: history_rv
+            viewclass: 'HistoryItem'
+            bar_width: dp(4)
+            bar_color: neon_blue
+            RecycleBoxLayout:
+                default_size: None, dp(140)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+                spacing: dp(15)
+                padding: [0, dp(10), 0, dp(30)]
+
+
+<SellerHistoryItem>:
+    orientation: 'vertical'
+    size_hint_y: None
+    height: dp(140)
+    padding: [dp(15), dp(12)]
+    canvas.before:
+        # Background: Deep "Glass" finish
+        Color:
+            rgba: [1, 1, 1, 0.05]
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [12,]
+        # Border: Subtle outline
+        Color:
+            rgba: [1, 1, 1, 0.1]
+        Line:
+            width: 1
+            rounded_rectangle: (self.x, self.y, self.width, self.height, 12)
+
+    # TOP ROW: Product Name and Total Price
+    BoxLayout:
+        size_hint_y: None
+        height: dp(40)
+        Label:
+            text: root.product_name
+            font_size: '18sp'
+            bold: True
+            color: [1, 1, 1, 1]
+            halign: 'left'
+            text_size: self.size
+            valign: 'middle'
+        Label:
+            text: "CFA" + root.total_row
+            font_size: '22sp'
+            bold: True
+            color: 0, 0.7, 1, 1  # Standard Neon Blue if variable isn't set
+            halign: 'right'
+            text_size: self.size
+            valign: 'middle'
+
+    # MIDDLE ROW: Separator Line
+    Widget:
+        size_hint_y: None
+        height: dp(15)
+        canvas:
+            Color:
+                rgba: [1, 1, 1, 0.15]
+            Line:
+                points: [self.x + dp(5), self.center_y, self.right - dp(5), self.center_y]
+                width: 1
+
+    # BOTTOM CONTENT: Telemetry & Details
+    GridLayout:
+        cols: 2
+        spacing: dp(10)
+
+        # Left Column: Delivery Info
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text: "DELIVERY AGENT"
+                font_size: '10sp'
+                color: [1, 1, 1, 0.5]
+                halign: 'left'
+                text_size: self.size
+            Label:
+                text: root.delivery_agent_name
+                font_size: '14sp'
+                color: [1, 1, 1, 0.9]
+                halign: 'left'
+                text_size: self.size
+
+        # Right Column: Date Info
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text: "TRANSACTION DATE"
+                font_size: '10sp'
+                color: [1, 1, 1, 0.5]
+                halign: 'right'
+                text_size: self.size
+            Label:
+                text: root.date
+                font_size: '14sp'
+                color: [1, 1, 1, 0.9]
+                halign: 'right'
+                text_size: self.size
+    # UNIT DATA FOOTER
+    Label:
+        text: "UNIT VAL: CFA" + root.price + "  [color=33ccff]|[/color]  QUANTITY: " + root.qty
+        markup: True
+        font_size: '11sp'
+        color: [1, 1, 1, 0.5]
+        halign: 'left'
+        size_hint_y: None
+        height: dp(20)
+        text_size: self.size
+
+
+
+<SellerHistoryPage>:
+    name: 'sellerhistorypage'
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: [dp(20), dp(15)]
+        spacing: dp(10)
+
+        # Header Section
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            SecondaryButton:
+                text: "BACK"
+                size_hint: None, None
+                size: dp(70), dp(35)
+                on_press: app.root.current = "seller_profile_page"
+            Label:
+                text: "Seller History"
+                font_size: '14sp'
+                bold: True
+                color: accent_gold
+                letter_spacing: 4
+
+        # The Scrollable List
+        RecycleView:
+            id: seller_history_rv
+            viewclass: 'SellerHistoryItem'
+            bar_width: dp(4)
+            bar_color: neon_blue
+            RecycleBoxLayout:
+                default_size: None, dp(140)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+                spacing: dp(15)
+                padding: [0, dp(10), 0, dp(30)]
+
+<ConfigureBuisnessPage>:
+    name:'configurebuisnesspage'
+    canvas.before:
+        Color:
+            rgba: [0.05, 0.05, 0.07, 1] # Dark background
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+
+        Label:
+            text: "CONFIGURE BUSINESS"
+            font_size: '24sp'
+            bold: True
+            size_hint_y: None
+            height: dp(50)
+            color: [1, 1, 1, 1]
+
+        ScrollView:
+            do_scroll_x: False
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(20)
+                padding: [0, dp(10)]
+
+                # --- Business Name ---
+                VignetteInput:
+                    id: biz_name
+                    hint_text: "Business Name"
+                    icon: "store"
+
+                # --- Business Type ---
+                VignetteInput:
+                    id: biz_type
+                    hint_text: "Business Type (e.g. Retail, Food)"
+                    icon: "tag"
+
+                # --- Opening Time ---
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(70)
+                    spacing: dp(10)
+                    VignetteInput:
+                        id: open_time
+                        hint_text: "Opening Time (e.g. 08:00 AM)"
+                    VignetteInput:
+                        id: close_time
+                        hint_text: "Closing Time (e.g. 10:00 PM)"
+
+                # --- Profile Picture Path ---
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: dp(90)
+                    spacing: dp(5)
+                    Label:
+                        text: "Profile Picture File Path"
+                        font_size: '12sp'
+                        color: [1, 1, 1, 0.5]
+                        halign: 'left'
+                        text_size: self.size
+                    BoxLayout:
+                        spacing: dp(10)
+                        VignetteInput:
+                            id: pic_path
+                            hint_text: root.text
+                        Button:
+                            text: "BROWSE"
+                            size_hint_x: None
+                            width: dp(80)
+                            background_color: 0, 0.7, 1, 1
+                            on_release: root.update_profile_photo()
+
+
+                Label:
+                    text: root.check_text
+                    font_size: '12sp'
+                    color: [.2, 1, .3, 1]
+
+                # --- Submit Button ---
+                Button:
+                    text: "Create Buiness"
+                    size_hint_y: None
+                    height: dp(55)
+                    background_normal: ''
+                    background_color: [0, 0.6, 1, 1]
+                    bold: True
+                    on_release: root.create_buiness()
+
+# Custom Styled Input for the "Glass" look
+<VignetteInput@TextInput>:
+    size_hint_y: None
+    height: dp(50)
+    multiline: False
+    background_color: [1, 1, 1, 0.05]
+    foreground_color: [1, 1, 1, 1]
+    cursor_color: [0, 0.7, 1, 1]
+    hint_text_color: [1, 1, 1, 0.3]
+    padding: [dp(10), (self.height - self.line_height) / 2]
+    canvas.after:
+        Color:
+            rgba: [1, 1, 1, 0.2]
+        Line:
+            width: 1
+            rounded_rectangle: (self.x, self.y, self.width, self.height, 6)
+
+
+
+# ---------------------------------------------------------
+# 1. PRODUCT INFORMATION POPUP (Buyer View)
+# ---------------------------------------------------------
+<ProductInfoPopup>:
+    size_hint: (0.8, 0.65)
+    background_color: 0,0,0,0
+
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [30,]
+        Color:
+            rgba: accent_gold
+        Line:
+            width: 1.5
+            rounded_rectangle: (self.x, self.y, self.width, self.height, 30)
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(25)
+        spacing: dp(12)
+
+        Label:
+            text: app.root.get_screen('storepage').p_name
+            font_size: '26sp'
+            bold: True
+            color: [1,1,1,1]
+            size_hint_y: None
+            height: dp(45)
+
+        Label:
+            text: app.root.get_screen('storepage').p_cat.upper() if app.root.get_screen('storepage').p_cat else ""
+            font_size: '12sp'
+            color: accent_gold
+            letter_spacing: 2
+            size_hint_y: None
+            height: dp(20)
+
+        Label:
+            text: app.root.get_screen('storepage').p_desc
+            font_size: '15sp'
+            color: [1,1,1,0.7]
+            text_size: self.width - dp(20), None
+            halign: 'center'
+            valign: 'middle'
+
+        Label:
+            text: app.root.get_screen('storepage').p_price + " CFA"
+            font_size: '22sp'
+            bold: True
+            color: [0.4, 1, 0.4, 1] 
+            size_hint_y: None
+            height: dp(40)
+
+        Button:
+            text: "CLOSE"
+            size_hint: (0.7, None)
+            height: dp(48)
+            pos_hint: {'center_x': 0.5}
+            background_color: 0,0,0,0
+            bold: True
+            on_release: root.dismiss()
+            canvas.before:
+                Color:
+                    rgba: [1,1,1,0.1]
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [15,]
+
+# ---------------------------------------------------------
+# 2. ADD PRODUCT POPUP (Seller View)
+# ---------------------------------------------------------
+<AddProductPopup@ModalView>:
+    size_hint: (0.85, 0.85)
+    background_color: 0,0,0,0
+
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [25,]
+        Color:
+            rgba: neon_blue
+        Line:
+            width: 1.2
+            rounded_rectangle: (self.x, self.y, self.width, self.height, 25)
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+
+        Label:
+            text: "NEW PRODUCT"
+            font_size: '16sp'
+            bold: True
+            color: neon_blue
+            size_hint_y: None
+            height: dp(30)
+
+        ScrollView:
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(10)
+
+                TextInput:
+                    id: product_name
+                    hint_text: "Product Name"
+                    multiline: False
+                    size_hint_y: None
+                    height: dp(45)
+                    background_color: [1, 1, 1, 0.07]
+                    foreground_color: [1, 1, 1, 1]
+                    padding: [dp(12), dp(12)]
+
+                TextInput:
+                    id: description
+                    hint_text: "Full Description"
+                    size_hint_y: None
+                    height: dp(80)
+                    background_color: [1, 1, 1, 0.07]
+                    foreground_color: [1, 1, 1, 1]
+                    padding: [dp(12), dp(12)]
+
+                BoxLayout:
+                    spacing: dp(10)
+                    size_hint_y: None
+                    height: dp(45)
+                    TextInput:
+                        id: category
+                        hint_text: "Category"
+                        background_color: [1, 1, 1, 0.07]
+                        foreground_color: [1, 1, 1, 1]
+                    TextInput:
+                        id: price
+                        hint_text: "Price (CFA)"
+                        input_filter: 'int'
+                        background_color: [1, 1, 1, 0.07]
+                        foreground_color: [1, 1, 1, 1]
+
+                TextInput:
+                    id: qty
+                    hint_text: "Stock Quantity"
+                    input_filter: 'int'
+                    size_hint_y: None
+                    height: dp(45)
+                    background_color: [1, 1, 1, 0.07]
+                    foreground_color: [1, 1, 1, 1]
+
+                Button:
+                    id: img
+                    text: "CHOOSE PRODUCT IMAGE"
+                    size_hint_y: None
+                    height: dp(45)
+                    background_color: 0,0,0,0
+                    color: [1, 1, 1, 1]
+                    on_release: 
+                        app.root.get_screen('seller_manager_page').get_image_and_upload(vps,root.seller_id,product_name.text)
+                    canvas.before:
+                        Color:
+                            rgba: [1, 1, 1, 0.07]
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5,]
+                        Color:
+                            rgba: neon_blue if self.state == 'normal' else [1,1,1,1]
+                        Line:
+                            width: 1
+                            dash_offset: 5
+                            dash_length: 3
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+
+        Button:
+            text: "ADD TO STORE"
+            size_hint_y: None
+            height: dp(50)
+            background_color: 0,0,0,0
+            bold: True
+            on_release:
+                app.root.get_screen('seller_manager_page').add_product(product_name.text, description.text, category.text, price.text, qty.text, img.text)
+                root.dismiss()
+            canvas.before:
+                Color:
+                    rgba: neon_blue
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [15,]
+
+# ---------------------------------------------------------
+# 3. UPDATE PRODUCT & SELLER INFO (Unified Editor Style)
+# ---------------------------------------------------------
+<UpdateProductPopup@ModalView>:
+    size_hint: (0.85, 0.85)
+    background_color: 0,0,0,0
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [25,]
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(12)
+
+        Label:
+            text: "UPDATE PRODUCT"
+            bold: True
+            color: neon_blue
+            size_hint_y: None
+            height: dp(30)
+
+        TextInput:
+            id: product_name
+            text: root.p_name
+            size_hint_y: None
+            height: dp(45)
+            background_color: [1,1,1,0.07]
+            foreground_color: [1,1,1,1]
+
+        TextInput:
+            id: description
+            text: root.p_desc
+            size_hint_y: None
+            height: dp(70)
+            background_color: [1,1,1,0.07]
+            foreground_color: [1,1,1,1]
+
+        TextInput:
+            id: price
+            text: root.p_price
+            input_filter: 'int'
+            size_hint_y: None
+            height: dp(45)
+            background_color: [1,1,1,0.07]
+            foreground_color: [1,1,1,1]
+
+        Button:
+            text: "SAVE UPDATES"
+            size_hint_y: None
+            height: dp(50)
+            background_color: 0,0,0,0
+            on_release: root.apply_update()
+            canvas.before:
+                Color:
+                    rgba: neon_blue
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [15,]
+
+<UpdateSellerInfoPopup@ModalView>:
+    size_hint: (0.85, 0.75)
+    background_color: 0,0,0,0
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [25,]
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(25)
+        spacing: dp(15)
+
+        Label:
+            text: "EDIT STORE PROFILE"
+            bold: True
+            color: accent_gold
+            size_hint_y: None
+            height: dp(30)
+
+        TextInput:
+            id: buisness_name
+            text: root.biz_name
+            hint_text: "Business Name"
+            size_hint_y: None
+            height: dp(45)
+            background_color: [1,1,1,0.07]
+            foreground_color: [1,1,1,1]
+
+        TextInput:
+            id: buisness_location
+            text: root.loc
+            hint_text: "Location"
+            size_hint_y: None
+            height: dp(45)
+            background_color: [1,1,1,0.07]
+            foreground_color: [1,1,1,1]
+
+        TextInput:
+            id: open_time
+            text: root.o_time
+            hint_text: "Working Hours"
+            size_hint_y: None
+            height: dp(45)
+            background_color: [1,1,1,0.07]
+            foreground_color: [1,1,1,1]
+
+        Button:
+            text: "UPDATE PROFILE"
+            size_hint_y: None
+            height: dp(50)
+            background_color: 0,0,0,0
+            bold: True
+            on_release: root.apply_update()
+            canvas.before:
+                Color:
+                    rgba: accent_gold
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [15,]
+
+
+<OrderRow@BoxLayout>:
+    # Properties must match the keys in your Python dictionary
+    order_id: ''
+    product_name: ''
+    buyer_name: ''
+    b_location: ''
+    agent_name: ''
+    quantity: ''
+    status: '' 
+
+    canvas.before:
+        Color:
+            rgba: [1, 1, 1, 0.05]
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [5,]
+
+    orientation: 'horizontal'
+    padding: dp(10)
+    spacing: dp(15)
+    size_hint_y: None
+    height: dp(60)
+
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: root.buyer_name
+            bold: True
+            halign: 'left'
+            text_size: self.size
+            color: accent_gold
+        Label:
+            text: root.product_name + " (Qty: " + root.quantity + ")"
+            font_size: '11sp'
+            halign: 'left'
+            text_size: self.size
+            color: [1, 1, 1, 0.7]
+
+    Label:
+        text: root.b_location
+        font_size: '11sp'
+        halign: 'center'
+    
+    Label:
+        text: root.status
+        font_size: '11sp'
+        # Conditional coloring for status
+        color: [0, 1, 0.5, 1] if root.status == "COMPLETED" else [1, 0.5, 0, 1]
+
+    Button:
+        text: "MANAGE"
+        size_hint_x: None
+        width: dp(80)
+        background_color: 0,0,0,0
+        canvas.before:
+            Color:
+                rgba: neon_blue
+            Line:
+                width: 1
+                rectangle: (self.x, self.y, self.width, self.height)
+        on_release: app.root.get_screen('sellerorderspage').manage_order()
+
+<SellerOrdersPage>:
+    name: 'seller_orders'
+    canvas.before:
+        Color:
+            rgba: bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+
+        # Header
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            SecondaryButton:
+                text: "<<"
+                size_hint: None, None
+                size: dp(75), dp(35)
+                pos_hint: {'center_y': 0.5, 'x': 0}
+                on_release: app.root.current = "seller_manager_page"
+
+            Label:
+                text: "SELLER LOGISTICS COMMAND"
+                font_size: '18sp'
+                bold: True
+                halign: 'left'
+                text_size: self.size
+                color: accent_gold
+
+        # Table Headers
+        BoxLayout:
+            size_hint_y: None
+            height: dp(30)
+            padding: [dp(10), 0]
+            Label:
+                text: "BUYER / ITEM"
+                font_size: '10sp'
+                color: [1, 1, 1, 0.5]
+            Label:
+                text: "LOCATION"
+                font_size: '10sp'
+                color: [1, 1, 1, 0.5]
+            Label:
+                text: "STATUS"
+                font_size: '10sp'
+                color: [1, 1, 1, 0.5]
+            Label:
+                text: "ACTION"
+                size_hint_x: None
+                width: dp(80)
+                font_size: '10sp'
+                color: [1, 1, 1, 0.5]
+
+        # Scrollable Order List
+        RecycleView:
+            viewclass: 'OrderRow'
+            data: root.orders_data  # Uses the list of dicts built in Python
+            RecycleBoxLayout:
+                default_size: None, dp(60)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+                spacing: dp(8)
