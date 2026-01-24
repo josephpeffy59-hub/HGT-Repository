@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrabNGo | Seamless Commerce</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Matured Background and Text Selection Colors */
+        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #e2e8f0; }
+        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); }
+        ::selection { background: rgba(16, 185, 129, 0.3); color: #fff; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200">
+
+    <nav class="sticky top-0 z-50 glass border-b border-slate-800/60">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+            <h1 class="text-2xl font-extrabold tracking-tighter text-white">
+                Grab<span class="text-emerald-500">N</span>Go
+            </h1>
+
+            <div class="flex items-center space-x-10 font-semibold text-sm uppercase tracking-widest">
+                <a href="/" class="text-slate-400 hover:text-emerald-400 transition-colors duration-300">Home</a>
+                <a href="/about" class="text-slate-400 hover:text-emerald-400 transition-colors duration-300">Our Team</a>
+                <a href="/register" class="bg-emerald-600 text-white px-8 py-2.5 rounded-xl hover:bg-emerald-500 hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all duration-300 active:scale-95">
+                    Join Now
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-black border-t border-slate-900 py-16 mt-20">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col items-center">
+            <div class="mb-6 text-xl font-bold text-white tracking-widest">
+                GRAB<span class="text-emerald-500">N</span>GO
+            </div>
+            <p class="text-slate-500 text-sm tracking-wide">
+                &copy; 2026 GrabNGo Technologies. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="min-h-screen flex items-center justify-center bg-slate-950 px-6">
+    <div class="max-w-md w-full relative">
+        <div class="absolute -inset-1 bg-gradient-to-r from-emerald-600 to-cyan-600 rounded-3xl blur opacity-20"></div>
+        
+        <div class="relative bg-slate-900 border border-slate-800 p-12 rounded-3xl shadow-2xl text-center">
+            <div class="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-8 border border-emerald-500/20">
+                <svg class="w-10 h-10 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+
+            <h2 class="text-3xl font-bold text-white mb-4">Access <span class="text-emerald-400">Granted</span></h2>
+            <p class="text-slate-400 mb-10">Your GrapNGo account has been successfully synchronized with our marketplace.</p>
+
+            <a href="/" class="block w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-xl transition-all active:scale-95">
+                Go to Home
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
